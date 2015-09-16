@@ -7,7 +7,8 @@
  * Tokenizer type.  You need to fill in the type as part of your implementation.
  */
 
-struct TokenizerT_ {
+struct TokenizerT_ 
+{
 };
 
 typedef struct TokenizerT_ TokenizerT;
@@ -26,8 +27,8 @@ typedef struct TokenizerT_ TokenizerT;
  * You need to fill in this function as part of your implementation.
  */
 
-TokenizerT *TKCreate( char * ts ) {
-
+TokenizerT *TKCreate( char * ts )
+{
   return NULL;
 }
 
@@ -38,7 +39,8 @@ TokenizerT *TKCreate( char * ts ) {
  * You need to fill in this function as part of your implementation.
  */
 
-void TKDestroy( TokenizerT * tk ) {
+void TKDestroy( TokenizerT * tk )
+{
 }
 
 /*
@@ -53,8 +55,8 @@ void TKDestroy( TokenizerT * tk ) {
  * You need to fill in this function as part of your implementation.
  */
 
-char *TKGetNextToken( TokenizerT * tk ) {
-
+char *TKGetNextToken( TokenizerT * tk ) 
+{
   return NULL;
 }
 
@@ -65,7 +67,7 @@ char *TKGetNextToken( TokenizerT * tk ) {
  * Each token should be printed on a separate line.
  */
 
-int main(int argc, char **argv) {
-
+int main(int argc, char **argv)
+{
   return 0;
 }
