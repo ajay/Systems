@@ -2,13 +2,16 @@
  * tokenizer.c
  */
 #include <stdio.h>
-
+#include <stdlib.h>
+#include <assert.h>
 /*
  * Tokenizer type.  You need to fill in the type as part of your implementation.
  */
 
 struct TokenizerT_ 
 {
+	char *tokenString;
+	int *tokenNumber;
 };
 
 typedef struct TokenizerT_ TokenizerT;
@@ -29,6 +32,15 @@ typedef struct TokenizerT_ TokenizerT;
 
 TokenizerT *TKCreate( char * ts )
 {
+	struct TokenizerT_ *newToken;
+	newToken = malloc(sizeof(struct TokenizerT_));
+
+	newToken->tokenString = ts;
+	newToken->tokenNumber = malloc(sizeof(int) * strlen(ts));
+	memset(newToken->tokenNumber, 0, sizeof(int) * strlen(ts));
+
+
+	
   return NULL;
 }
 
@@ -69,5 +81,21 @@ char *TKGetNextToken( TokenizerT * tk )
 
 int main(int argc, char **argv)
 {
+	struct TokenizerT_ *token = TKCreate(argv[1])  
+
   return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
