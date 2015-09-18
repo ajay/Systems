@@ -1,9 +1,12 @@
 /*
+ * Ajay Srivastava (as1877) & Srihari Chekuri (svc31)
  * tokenizer.c
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+
 /*
  * Tokenizer type.  You need to fill in the type as part of your implementation.
  */
@@ -30,18 +33,16 @@ typedef struct TokenizerT_ TokenizerT;
  * You need to fill in this function as part of your implementation.
  */
 
-TokenizerT *TKCreate( char * ts )
+TokenizerT *TKCreate(char * ts)
 {
 	struct TokenizerT_ *newToken;
 	newToken = malloc(sizeof(struct TokenizerT_));
 
-	newToken->tokenString = ts;
-	newToken->tokenNumber = malloc(sizeof(int) * strlen(ts));
-	memset(newToken->tokenNumber, 0, sizeof(int) * strlen(ts));
+	// newToken->tokenString = ts;
+	// newToken->tokenNumber = malloc(sizeof(int) * strlen(ts));
+	// memset(newToken->tokenNumber, 0, sizeof(int) * strlen(ts));
 
-
-	
-  return NULL;
+	return NULL;
 }
 
 /*
@@ -51,8 +52,9 @@ TokenizerT *TKCreate( char * ts )
  * You need to fill in this function as part of your implementation.
  */
 
-void TKDestroy( TokenizerT * tk )
+void TKDestroy(TokenizerT * tk)
 {
+
 }
 
 /*
@@ -67,7 +69,7 @@ void TKDestroy( TokenizerT * tk )
  * You need to fill in this function as part of your implementation.
  */
 
-char *TKGetNextToken( TokenizerT * tk ) 
+char *TKGetNextToken(TokenizerT * tk) 
 {
   return NULL;
 }
@@ -81,21 +83,11 @@ char *TKGetNextToken( TokenizerT * tk )
 
 int main(int argc, char **argv)
 {
-	struct TokenizerT_ *token = TKCreate(argv[1])  
+	printf("\n");
+	struct TokenizerT_ *token = TKCreate(argv[1]);
+	printf("Hello \n\n");
 
-  return 0;
+	printf("%s !!!!\n %d \n", argv[1], argc);
+
+	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
