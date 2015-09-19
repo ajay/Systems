@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 
 /*
  * Tokenizer type.  You need to fill in the type as part of your implementation.
@@ -13,8 +14,11 @@
 
 struct TokenizerT_ 
 {
-	char *tokenString;
-	int *tokenNumber;
+	char *inputString;
+	char *token;
+	char *start;
+	char *end;
+	int type;
 };
 
 typedef struct TokenizerT_ TokenizerT;
@@ -37,12 +41,15 @@ TokenizerT *TKCreate(char * ts)
 {
 	struct TokenizerT_ *newToken;
 	newToken = malloc(sizeof(struct TokenizerT_));
+	newToken->inputString = malloc(sizeof(char)*strlen(ts)+1);
 
-	// newToken->tokenString = ts;
-	// newToken->tokenNumber = malloc(sizeof(int) * strlen(ts));
+	newToken->inputString = ts;
+
+
+
+
 	// memset(newToken->tokenNumber, 0, sizeof(int) * strlen(ts));
-
-	return NULL;
+	return newToken;
 }
 
 /*
@@ -83,11 +90,19 @@ char *TKGetNextToken(TokenizerT * tk)
 
 int main(int argc, char **argv)
 {
-	printf("\n");
-	struct TokenizerT_ *token = TKCreate(argv[1]);
-	printf("Hello \n\n");
 
-	printf("%s !!!!\n %d \n", argv[1], argc);
+	if(argc != 2){
+		printf("INVALID NUMBER OF ARGUMENTS\n");
+		return 0;
+	}
+
+	struct TokenizerT_ *token = TKCreate(argv[1]);
+	printf("%s !!!!\n", token->inputString);
+
+	// int i;
+// 	for(i=0; i<k; i++){
+// 	printf("%d \n",token->tokenNumber[i]);
+// }
 
 	return 0;
 }
