@@ -91,13 +91,18 @@ char *TKGetNextToken(TokenizerT * tk)
 int main(int argc, char **argv)
 {
 
+	char *token ;
+
 	if(argc != 2){
 		printf("INVALID NUMBER OF ARGUMENTS\n");
 		return 0;
 	}
 
-	struct TokenizerT_ *token = TKCreate(argv[1]);
+	struct TokenizerT_ *input = TKCreate(argv[1]);
 	printf("%s !!!!\n", token->inputString);
+
+	token = TKGetNextToken(input);
+
 
 	// int i;
 // 	for(i=0; i<k; i++){
