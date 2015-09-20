@@ -51,8 +51,6 @@ TokenizerT *TKCreate(char *originalString)
 	strcpy(newToken->inputString, originalString);
 	newToken->start = newToken->inputString;
 	newToken->current = newToken->inputString;
-	// newToken->token = malloc(500);
-	printf("Size of token: %ld", sizeof newToken->token);
 	return newToken;
 }
 
@@ -81,51 +79,26 @@ void TKDestroy(TokenizerT * tk)
  */
 
 char *TKGetNextToken(TokenizerT *input) 
-{
-	
+{	
 	int foundToken = 0;
-
-	// while(((input->Ptr_Sep && tk->Ptr_1) != '\0') || NULL)
 
 	while ((input != NULL) && (input->start != '\0'))
 	{
-		// word
+		// Words
 		if (isalpha(input->current[0]) != 0)
 		{
 			while (isalnum(input->current[0]) != 0)
 			{
 				input->current++;
-				printf("test: %c\n", input->current[0]);
 			}
 
-
 			int length = strlen(input->start) - strlen(input->current);
-
-			printf("Length: %d\nOriginal size: %ld\n", length, sizeof input->token);
-
-			// input->token = ********char * [length];
-
-			printf("input->current - input->start: %ld\n", input->current - input->start);
-			printf("Size of input->token: %ld\n", sizeof input-> token);
+			input->token = (char*)malloc(sizeof(char)*length+1);
 
 			strncpy(input->token, input->start, length);
-
-
-
-			input->token[sizeof input->token] = '\0';
+			input->token[length] = '\0';
+			
 			return input->token;
-
-			break;
-
-
-
-			// input->token = malloc(sizeof(int) * (input->current - input->start + 1) );
-
-			// memcpy(input->token, &input->start[0], sizeof input->token-1);
-			// input->token[sizeof input->token] = '\0';
-			// return input->token;
-
-			// break;
 		}
 	}
 	return NULL;
@@ -143,25 +116,15 @@ int main(int argc, char **argv)
 	if(argc != 2)
 	{
 		printf("INVALID NUMBER OF ARGUMENTS\n");
-		return 1;
+		return;
 	}
 
 	TokenizerT *input = TKCreate(argv[1]);
-
 	char *tokens;
 
 	tokens = TKGetNextToken(input);
 
-	printf("Token: %s\n", tokens);
-	free(input->token);
-
-	// tokens = TKGetNextToken(input);
-
-
-	// int i;
-// 	for(i=0; i<k; i++){
-// 	printf("%d \n",token->tokenNumber[i]);
-// }
+	printf("Tokens is: %s\n", tokens);
 
 	return 0;
 }
