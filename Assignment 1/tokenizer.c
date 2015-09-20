@@ -93,6 +93,35 @@ char *TKGetNextToken(TokenizerT *input)
 			isASpace = 1;
 		}
 
+		// Ignore Comments
+		else if ((input->current[0] == '/') && (input->current[1] == '/'))
+		{
+			while (input->current[0] != '\n' && input->current[0] != '\0')
+			{
+				input->current++;
+			}
+
+			input->start = input->current;
+			isASpace=1;
+		}
+
+		else if ((input->current[0] == '/') && (input->current[1] == '*'))
+		{
+			while (! (input->current[0] == '*' && input->current[1] == '/'))
+			{
+				input->current++;
+				if (input->current[0] == '\0')
+					break;
+			}
+
+			if (input->current[0] == '\0')
+				break;
+
+			input->current+=2;
+			input->start = input->current;
+			isASpace=1;
+		}
+
 		// Words
 		else if (isalpha(input->current[0]) != 0)
 		{
