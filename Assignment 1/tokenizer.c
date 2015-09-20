@@ -5,9 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <string.h>
-// #include <ctype.h>
 
 /*
  * Tokenizer type.  You need to fill in the type as part of your implementation.
@@ -107,18 +105,15 @@ char *TKGetNextToken(TokenizerT *input)
 
 			input->start = input->current;
 			
+			printf("Word\n");
 			return input->token;
 		}
 
 		// Hex
 		else if(input->current[0]== '0' && (input->current[1]== 'x' || input->current[1]== 'X') )
 		{
-			int x=0;
-			while (isalnum(input->current[0]) != 0 && x!=2)
-			{
-				input->current++;
-				x++;
-			}
+			input->current+=2;
+
 			while (isxdigit(input->current[0]) != 0)
 			{
 				input->current++;
@@ -132,13 +127,14 @@ char *TKGetNextToken(TokenizerT *input)
 
 			input->start = input->current;
 			
+			printf("Hex\n");
 			return input->token;
 		}
 
 		// Octal numbers
 		else if(input->current[0]== '0')
 		{
-			while(isdigit(input->current[0]) != 0 && input->current[0] != '8' && input->current[0] != '9' )
+			while((isdigit(input->current[0])) != 0 && (input->current[0] != '8') && (input->current[0] != '9'))
 			{
 				input->current++;
 			}
@@ -151,13 +147,15 @@ char *TKGetNextToken(TokenizerT *input)
 
 			input->start = input->current;
 			
+			printf("Octal\n");
 			return input->token;
 		}
 
 		// Floating point
-		else if()
+		else if(isAFloat(input) == 0)
 		{
-
+			printf("Yes float");
+			return;
 		}
 
 		// Integers
@@ -176,6 +174,7 @@ char *TKGetNextToken(TokenizerT *input)
 
 			input->start = input->current;
 			
+			printf("Integer\n");
 			return input->token;
 
 		}
@@ -197,12 +196,35 @@ char *TKGetNextToken(TokenizerT *input)
  * Each token should be printed on a separate line.
  */
 
+int isAFloat(TokenizerT *input)
+{
+	// Return 0 for true
+
+	int numberOfPeriods = 0;
+
+	while (input->current[0] != 0x20 && isalpha(input->current[0]) == 0)
+	{
+		if (input->current[0] == '.')
+			numberOfPeriods++;
+		input->current++;
+		printf("         In the loop\n");
+	}
+
+	if (numberOfPeriods < 1)
+	{
+		input->current = input->start;
+		return 1;
+	}
+
+	return 0;
+}
+
 int main(int argc, char **argv)
 {
 	if(argc != 2)
 	{
 		printf("INVALID NUMBER OF ARGUMENTS\n");
-		return;
+		return 1;
 	}
 
 	TokenizerT *input = TKCreate(argv[1]);
