@@ -51,6 +51,8 @@ TokenizerT *TKCreate(char *originalString)
 	strcpy(newToken->inputString, originalString);
 	newToken->start = newToken->inputString;
 	newToken->current = newToken->inputString;
+	// newToken->token = malloc(500);
+	printf("Size of token: %ld", sizeof newToken->token);
 	return newToken;
 }
 
@@ -80,7 +82,7 @@ void TKDestroy(TokenizerT * tk)
 
 char *TKGetNextToken(TokenizerT *input) 
 {
-	int length = 0;
+	
 	int foundToken = 0;
 
 	// while(((input->Ptr_Sep && tk->Ptr_1) != '\0') || NULL)
@@ -90,18 +92,40 @@ char *TKGetNextToken(TokenizerT *input)
 		// word
 		if (isalpha(input->current[0]) != 0)
 		{
-			while (isalpha(input->current[0]) != 0 || isdigit(input->current[0]) != 0)
+			while (isalnum(input->current[0]) != 0)
 			{
 				input->current++;
+				printf("test: %c\n", input->current[0]);
 			}
 
-			input->token = malloc(sizeof(int) * (input->current - input->start + 1) );
 
-			memcpy(input->token, &input->start[0], sizeof input->token-1);
+			int length = strlen(input->start) - strlen(input->current);
+
+			printf("Length: %d\nOriginal size: %ld\n", length, sizeof input->token);
+
+			// input->token = ********char * [length];
+
+			printf("input->current - input->start: %ld\n", input->current - input->start);
+			printf("Size of input->token: %ld\n", sizeof input-> token);
+
+			strncpy(input->token, input->start, length);
+
+
+
 			input->token[sizeof input->token] = '\0';
 			return input->token;
 
 			break;
+
+
+
+			// input->token = malloc(sizeof(int) * (input->current - input->start + 1) );
+
+			// memcpy(input->token, &input->start[0], sizeof input->token-1);
+			// input->token[sizeof input->token] = '\0';
+			// return input->token;
+
+			// break;
 		}
 	}
 	return NULL;
