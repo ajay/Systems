@@ -83,7 +83,6 @@ char *TKGetNextToken(TokenizerT *input)
 	while ((input != NULL) && (input->start[0] != '\0'))
 	{
 		int isASpace = 0;
-		int isAnEscape = 0;
 
 		// Skip spaces, etc.
 		if ((input->start[0] == 0x20) || (input->start[0] == 0x09) || (input->start[0] == 0x0b) || (input->start[0] == 0x0c) || (input->start[0] == 0x0a) || (input->start[0] == 0x0d))
@@ -160,9 +159,8 @@ char *TKGetNextToken(TokenizerT *input)
 				 (input->current[0] == '\"') ||
 				 (input->current[0] == '\?'))
 		{
-			isAnEscape++;
+			printf("\033[31mERROR: ESCAPE CHAR [0x%02X]  -->\033[0m", input->current[0]);
 			input->current+=2;
-			printf("\033[31mERROR: ESCAPE CHAR  \033[0m");
 		}
 
 		//C Operators
@@ -410,7 +408,7 @@ char *TKGetNextToken(TokenizerT *input)
 		}
 
 		//Return token to main()
-		if ((isASpace == 0) && (isAnEscape == 0))
+		if (isASpace == 0)
 		{
 			int length = strlen(input->start) - strlen(input->current);
 			input->token = (char*)malloc(sizeof(char)*length+1);
@@ -423,30 +421,7 @@ char *TKGetNextToken(TokenizerT *input)
 			return input->token;
 		}
 
-		if (isAnEscape == 1)
-		{
-			// int length = strlen(input->start) - strlen(input->current) + 6;
-			// input->token = (char*)malloc(sizeof(char)*length+1);
-
-			// strncpy(input->token, input->start, length);
-
-			// input->start = input->start[length-6];
-			
-			// input->token[length-6] = '[';
-			// input->token[length-5] = '0';
-			// input->token[length-4] = 'x';
-			// input->token[length-3]
-			// input->token[length-2]
-			// input->token[length-1] = ']';
-			// input->token[length] = '\0';
-
-			// input->start = input->current;
-			
-			return input->token;
-		}
-
 		isASpace = 0;
-		isAnEscape = 0;
 	}
 	return NULL;
 } 
