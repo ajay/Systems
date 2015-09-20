@@ -105,7 +105,7 @@ char *TKGetNextToken(TokenizerT *input)
 
 			input->start = input->current;
 			
-			printf("Word\n");
+			printf("Word:     ");
 			return input->token;
 		}
 
@@ -127,7 +127,29 @@ char *TKGetNextToken(TokenizerT *input)
 
 			input->start = input->current;
 			
-			printf("Hex\n");
+			printf("Hex:      ");
+			return input->token;
+		}
+
+		// Crappy Floating Point
+		else if(input->current[0] == '.')
+		{
+			input->current++;
+
+			while(isdigit(input->current[0]) != 0)
+			{
+				input->current++;
+			}
+
+			int length = strlen(input->start) - strlen(input->current);
+			input->token = (char*)malloc(sizeof(char)*length+1);
+
+			strncpy(input->token, input->start, length);
+			input->token[length] = '\0';
+
+			input->start = input->current;
+			
+			printf("Floating: ");
 			return input->token;
 		}
 
@@ -147,15 +169,8 @@ char *TKGetNextToken(TokenizerT *input)
 
 			input->start = input->current;
 			
-			printf("Octal\n");
+			printf("Octal:    ");
 			return input->token;
-		}
-
-		// Floating point
-		else if(isAFloat(input) == 0)
-		{
-			printf("Yes float");
-			return;
 		}
 
 		// Integers
@@ -174,9 +189,8 @@ char *TKGetNextToken(TokenizerT *input)
 
 			input->start = input->current;
 			
-			printf("Integer\n");
+			printf("Integer:  ");
 			return input->token;
-
 		}
 
 		else
@@ -185,7 +199,7 @@ char *TKGetNextToken(TokenizerT *input)
 			return NULL;
 		}
 	}
-	printf("Exit because end of input reached\n");
+	printf("\nExit because end of input reached\n");
 	return NULL;
 } 
 
@@ -195,46 +209,23 @@ char *TKGetNextToken(TokenizerT *input)
  * Print out the tokens in the second string in left-to-right order.
  * Each token should be printed on a separate line.
  */
-
-int isAFloat(TokenizerT *input)
-{
-	// Return 0 for true
-
-	int numberOfPeriods = 0;
-
-	while (input->current[0] != 0x20 && isalpha(input->current[0]) == 0)
-	{
-		if (input->current[0] == '.')
-			numberOfPeriods++;
-		input->current++;
-		printf("         In the loop\n");
-	}
-
-	if (numberOfPeriods < 1)
-	{
-		input->current = input->start;
-		return 1;
-	}
-
-	return 0;
-}
-
 int main(int argc, char **argv)
 {
+	printf("\n");
 	if(argc != 2)
 	{
-		printf("INVALID NUMBER OF ARGUMENTS\n");
+		printf("ERROR: INVALID NUMBER OF ARGUMENTS\n");
 		return 1;
 	}
 
 	TokenizerT *input = TKCreate(argv[1]);
-	char *tokens;
+	char *tokens = " ";
 
 	while (tokens != NULL)
 	{
 		tokens = TKGetNextToken(input);
 		if (tokens != NULL)
-			printf("Token is: %s\n", tokens);
+			printf("%s\n", tokens);
 	} 
 	return 0;
 }
