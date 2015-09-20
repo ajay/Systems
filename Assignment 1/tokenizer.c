@@ -83,6 +83,7 @@ char *TKGetNextToken(TokenizerT *input)
 	while ((input != NULL) && (input->start[0] != '\0'))
 	{
 		int isASpace = 0;
+		int isAWord = 0;
 
 		// Skip spaces, etc.
 		if ((input->start[0] == 0x20) || (input->start[0] == 0x09) || (input->start[0] == 0x0b) || (input->start[0] == 0x0c) || (input->start[0] == 0x0a) || (input->start[0] == 0x0d))
@@ -99,7 +100,7 @@ char *TKGetNextToken(TokenizerT *input)
 			{
 				input->current++;
 			}
-			printf("Word                ");
+			isAWord = 1;
 		}
 
 		// Hex
@@ -418,10 +419,81 @@ char *TKGetNextToken(TokenizerT *input)
 
 			input->start = input->current;
 			
+			if (isAWord == 1)
+			{
+				if (strstr(input->token, "sizeof") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"sizeof\"\033[0m\n");
+				if (strstr(input->token, "auto") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"auto\"\033[0m\n");
+				if (strstr(input->token, "break") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"break\"\033[0m\n");
+				if (strstr(input->token, "case") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"case\"\033[0m\n");
+				if (strstr(input->token, "char") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"char\"\033[0m\n");
+				if (strstr(input->token, "const") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"const\"\033[0m\n");
+				if (strstr(input->token, "continue") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"continue\"\033[0m\n");
+				if (strstr(input->token, "default") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"default\"\033[0m\n");
+				if (strstr(input->token, "do") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"do\"\033[0m\n");
+				if (strstr(input->token, "double") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"double\"\033[0m\n");
+				if (strstr(input->token, "else") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"else\"\033[0m\n");
+				if (strstr(input->token, "enum") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"enum\"\033[0m\n");
+				if (strstr(input->token, "extern") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"extern\"\033[0m\n");
+				if (strstr(input->token, "float") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"float\"\033[0m\n");
+				if (strstr(input->token, "for") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"for\"\033[0m\n");
+				if (strstr(input->token, "goto") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"goto\"\033[0m\n");
+				if (strstr(input->token, "if") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"if\"\033[0m\n");
+				if (strstr(input->token, "int") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"int\"\033[0m\n");
+				if (strstr(input->token, "long") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"long\"\033[0m\n");
+				if (strstr(input->token, "register") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"register\"\033[0m\n");
+				if (strstr(input->token, "return") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"return\"\033[0m\n");
+				if (strstr(input->token, "short") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"short\"\033[0m\n");
+				if (strstr(input->token, "signed") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"signed\"\033[0m\n");
+				if (strstr(input->token, "static") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"static\"\033[0m\n");
+				if (strstr(input->token, "struct") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"struct\"\033[0m\n");
+				if (strstr(input->token, "switch") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"switch\"\033[0m\n");
+				if (strstr(input->token, "typedef") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"typedef\"\033[0m\n");
+				if (strstr(input->token, "union") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"union\"\033[0m\n");
+				if (strstr(input->token, "unsigned") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"unsigned\"\033[0m\n");
+				if (strstr(input->token, "void") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"void\"\033[0m\n");
+				if (strstr(input->token, "volatile") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"volatile\"\033[0m\n");
+				if (strstr(input->token, "while") != NULL)
+					printf("\033[31mThe token below contains a C Keyword: \"while\"\033[0m\n");
+				printf("Word                ");
+
+			}
+
 			return input->token;
 		}
 
 		isASpace = 0;
+		isAWord = 0;
 	}
 	return NULL;
 } 
