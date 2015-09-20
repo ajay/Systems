@@ -109,6 +109,27 @@ char *TKGetNextToken(TokenizerT *input)
 			
 			return input->token;
 		}
+
+		// Numbers
+		else if(isdigit(input->current[0]) !=0)
+		{
+			while(isdigit(input->current[0]) != 0)
+			{
+				input->current++;
+			}
+
+			int length = strlen(input->start) - strlen(input->current);
+			input->token = (char*)malloc(sizeof(char)*length+1);
+
+			strncpy(input->token, input->start, length);
+			input->token[length] = '\0';
+
+			input->start = input->current;
+			
+			return input->token;
+
+		}
+
 		else
 		{
 			printf("Exit because error\n");
@@ -131,11 +152,11 @@ int main(int argc, char **argv)
 	if(argc != 2)
 	{
 		printf("INVALID NUMBER OF ARGUMENTS\n");
-		return;
+		return 0;
 	}
 
 	TokenizerT *input = TKCreate(argv[1]);
-	char *tokens;
+	char *tokens = " ";
 
 	while (tokens != NULL)
 	{
