@@ -83,6 +83,7 @@ char *TKGetNextToken(TokenizerT *input)
 	while ((input != NULL) && (input->start[0] != '\0'))
 	{
 		int isASpace = 0;
+		int isAnEscape = 0;
 
 		// Skip spaces, etc.
 		if ((input->start[0] == 0x20) || (input->start[0] == 0x09) || (input->start[0] == 0x0b) || (input->start[0] == 0x0c) || (input->start[0] == 0x0a) || (input->start[0] == 0x0d))
@@ -144,6 +145,24 @@ char *TKGetNextToken(TokenizerT *input)
 				input->current++;
 			}
 			printf("Integer             ");
+		}
+
+		//Escape Characters
+		else if ((input->current[0] == '\a') ||
+				 (input->current[0] == '\b') ||
+				 (input->current[0] == '\f') ||
+				 (input->current[0] == '\n') ||
+				 (input->current[0] == '\r') ||
+				 (input->current[0] == '\t') ||
+				 (input->current[0] == '\v') ||
+				 (input->current[0] == '\\') ||
+				 (input->current[0] == '\'') ||
+				 (input->current[0] == '\"') ||
+				 (input->current[0] == '\?'))
+		{
+			isAnEscape++;
+			input->current+=2;
+			printf("\033[31mERROR: ESCAPE CHAR  \033[0m");
 		}
 
 		//C Operators
@@ -386,12 +405,12 @@ char *TKGetNextToken(TokenizerT *input)
 
 		else 
 		{
-			printf("\nPROGRAM EXIT DUE TO ERROR: \"%c\" --> [0x%02X] \n", input->current[0], input->current[0]);
+			printf("\n\033[31mPROGRAM EXIT DUE TO ERROR: \"%c\" --> [0x%02X] \n\033[0m", input->current[0], input->current[0]);
 			return NULL;
 		}
 
 		//Return token to main()
-		if (isASpace == 0)
+		if ((isASpace == 0) && (isAnEscape == 0))
 		{
 			int length = strlen(input->start) - strlen(input->current);
 			input->token = (char*)malloc(sizeof(char)*length+1);
@@ -403,7 +422,31 @@ char *TKGetNextToken(TokenizerT *input)
 			
 			return input->token;
 		}
+
+		if (isAnEscape == 1)
+		{
+			// int length = strlen(input->start) - strlen(input->current) + 6;
+			// input->token = (char*)malloc(sizeof(char)*length+1);
+
+			// strncpy(input->token, input->start, length);
+
+			// input->start = input->start[length-6];
+			
+			// input->token[length-6] = '[';
+			// input->token[length-5] = '0';
+			// input->token[length-4] = 'x';
+			// input->token[length-3]
+			// input->token[length-2]
+			// input->token[length-1] = ']';
+			// input->token[length] = '\0';
+
+			// input->start = input->current;
+			
+			return input->token;
+		}
+
 		isASpace = 0;
+		isAnEscape = 0;
 	}
 	return NULL;
 } 
@@ -416,7 +459,6 @@ char *TKGetNextToken(TokenizerT *input)
  */
 int main(int argc, char **argv)
 {
-	printf("\n");
 	if(argc != 2)
 	{
 		printf("ERROR: INVALID NUMBER OF ARGUMENTS\n");
