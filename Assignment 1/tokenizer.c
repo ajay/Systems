@@ -7,17 +7,18 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+// #include <ctype.h>
 
 /*
  * Tokenizer type.  You need to fill in the type as part of your implementation.
  */
 
-struct TokenizerT_ 
+struct TokenizerT_
 {
 	char *inputString;
 	char *token;
 	char *start;
-	char *end;
+	char *current;
 	int type;
 };
 
@@ -37,18 +38,19 @@ typedef struct TokenizerT_ TokenizerT;
  * You need to fill in this function as part of your implementation.
  */
 
-TokenizerT *TKCreate(char * ts)
+TokenizerT *TKCreate(char *originalString)
 {
-	struct TokenizerT_ *newToken;
+	if (sizeof originalString == 0)
+	{
+		return NULL;
+	}
+
+	TokenizerT *newToken;
 	newToken = malloc(sizeof(struct TokenizerT_));
-	newToken->inputString = malloc(sizeof(char)*strlen(ts)+1);
-
-	newToken->inputString = ts;
-
-
-
-
-	// memset(newToken->tokenNumber, 0, sizeof(int) * strlen(ts));
+	newToken->inputString = malloc(sizeof(char)*strlen(originalString)+1);
+	strcpy(newToken->inputString, originalString);
+	newToken->start = newToken->inputString;
+	newToken->current = newToken->inputString;
 	return newToken;
 }
 
@@ -76,10 +78,34 @@ void TKDestroy(TokenizerT * tk)
  * You need to fill in this function as part of your implementation.
  */
 
-char *TKGetNextToken(TokenizerT * tk) 
+char *TKGetNextToken(TokenizerT *input) 
 {
-  return NULL;
-}
+	int length = 0;
+	int foundToken = 0;
+
+	// while(((input->Ptr_Sep && tk->Ptr_1) != '\0') || NULL)
+
+	while ((input != NULL) && (input->start != '\0'))
+	{
+		// word
+		if (isalpha(input->current[0]) != 0)
+		{
+			while (isalpha(input->current[0]) != 0 || isdigit(input->current[0]) != 0)
+			{
+				input->current++;
+			}
+
+			input->token = malloc(sizeof(int) * (input->current - input->start + 1) );
+
+			memcpy(input->token, &input->start[0], sizeof input->token-1);
+			input->token[sizeof input->token] = '\0';
+			return input->token;
+
+			break;
+		}
+	}
+	return NULL;
+} 
 
 /*
  * main will have a string argument (in argv[1]).
@@ -90,18 +116,22 @@ char *TKGetNextToken(TokenizerT * tk)
 
 int main(int argc, char **argv)
 {
-
-	char *token ;
-
-	if(argc != 2){
+	if(argc != 2)
+	{
 		printf("INVALID NUMBER OF ARGUMENTS\n");
-		return 0;
+		return 1;
 	}
 
-	struct TokenizerT_ *input = TKCreate(argv[1]);
-	printf("%s !!!!\n", token->inputString);
+	TokenizerT *input = TKCreate(argv[1]);
 
-	token = TKGetNextToken(input);
+	char *tokens;
+
+	tokens = TKGetNextToken(input);
+
+	printf("Token: %s\n", tokens);
+	free(input->token);
+
+	// tokens = TKGetNextToken(input);
 
 
 	// int i;
