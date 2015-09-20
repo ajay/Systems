@@ -82,10 +82,17 @@ char *TKGetNextToken(TokenizerT *input)
 {	
 	int foundToken = 0;
 
-	while ((input != NULL) && (input->start != '\0'))
+	while ((input != NULL) && (input->start[0] != '\0'))
 	{
+		// Skip spaces, etc.
+		if (input->start[0] == 0x20)
+		{
+			input->start++;
+			input->current++;
+		}
+
 		// Words
-		if (isalpha(input->current[0]) != 0)
+		else if (isalpha(input->current[0]) != 0)
 		{
 			while (isalnum(input->current[0]) != 0)
 			{
@@ -97,10 +104,18 @@ char *TKGetNextToken(TokenizerT *input)
 
 			strncpy(input->token, input->start, length);
 			input->token[length] = '\0';
+
+			input->start = input->current;
 			
 			return input->token;
 		}
+		else
+		{
+			printf("Exit because error\n");
+			return NULL;
+		}
 	}
+	printf("Exit because end of input reached\n");
 	return NULL;
 } 
 
@@ -122,9 +137,12 @@ int main(int argc, char **argv)
 	TokenizerT *input = TKCreate(argv[1]);
 	char *tokens;
 
-	tokens = TKGetNextToken(input);
-
-	printf("Tokens is: %s\n", tokens);
+	while (tokens != NULL)
+	{
+		tokens = TKGetNextToken(input);
+		if (tokens != NULL)
+			printf("Token is: %s\n", tokens);
+	} 
 
 	return 0;
 }
