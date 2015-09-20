@@ -110,7 +110,57 @@ char *TKGetNextToken(TokenizerT *input)
 			return input->token;
 		}
 
-		// Numbers
+		// Hex
+		else if(input->current[0]== '0' && (input->current[1]== 'x' || input->current[1]== 'X') )
+		{
+			int x=0;
+			while (isalnum(input->current[0]) != 0 && x!=2)
+			{
+				input->current++;
+				x++;
+			}
+			while (isxdigit(input->current[0]) != 0)
+			{
+				input->current++;
+			}
+
+			int length = strlen(input->start) - strlen(input->current);
+			input->token = (char*)malloc(sizeof(char)*length+1);
+
+			strncpy(input->token, input->start, length);
+			input->token[length] = '\0';
+
+			input->start = input->current;
+			
+			return input->token;
+		}
+
+		// Octal numbers
+		else if(input->current[0]== '0')
+		{
+			while(isdigit(input->current[0]) != 0 && input->current[0] != '8' && input->current[0] != '9' )
+			{
+				input->current++;
+			}
+
+			int length = strlen(input->start) - strlen(input->current);
+			input->token = (char*)malloc(sizeof(char)*length+1);
+
+			strncpy(input->token, input->start, length);
+			input->token[length] = '\0';
+
+			input->start = input->current;
+			
+			return input->token;
+		}
+
+		// Floating point
+		else if()
+		{
+
+		}
+
+		// Integers
 		else if(isdigit(input->current[0]) !=0)
 		{
 			while(isdigit(input->current[0]) != 0)
