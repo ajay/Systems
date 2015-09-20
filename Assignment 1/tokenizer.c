@@ -152,11 +152,11 @@ int main(int argc, char **argv)
 	if(argc != 2)
 	{
 		printf("INVALID NUMBER OF ARGUMENTS\n");
-		return 0;
+		return;
 	}
 
 	TokenizerT *input = TKCreate(argv[1]);
-	char *tokens = " ";
+	char *tokens;
 
 	while (tokens != NULL)
 	{
@@ -164,6 +164,5 @@ int main(int argc, char **argv)
 		if (tokens != NULL)
 			printf("Token is: %s\n", tokens);
 	} 
-
 	return 0;
 }
