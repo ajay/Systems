@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 /*
  * Tokenizer type.  You need to fill in the type as part of your implementation.
@@ -17,7 +18,6 @@ struct TokenizerT_
 	char *token;
 	char *start;
 	char *current;
-	int type;
 };
 
 typedef struct TokenizerT_ TokenizerT;
@@ -61,7 +61,9 @@ TokenizerT *TKCreate(char *originalString)
 
 void TKDestroy(TokenizerT * tk)
 {
-
+	free(tk->inputString);
+	free(tk->token);
+	free(tk);
 }
 
 /*
@@ -78,15 +80,16 @@ void TKDestroy(TokenizerT * tk)
 
 char *TKGetNextToken(TokenizerT *input) 
 {	
-	int foundToken = 0;
-
 	while ((input != NULL) && (input->start[0] != '\0'))
 	{
+		int isASpace = 0;
+
 		// Skip spaces, etc.
-		if (input->start[0] == 0x20)
+		if ((input->start[0] == 0x20) || (input->start[0] == 0x09) || (input->start[0] == 0x0b) || (input->start[0] == 0x0c) || (input->start[0] == 0x0a) || (input->start[0] == 0x0d))
 		{
 			input->start++;
 			input->current++;
+			isASpace = 1;
 		}
 
 		// Words
@@ -96,17 +99,7 @@ char *TKGetNextToken(TokenizerT *input)
 			{
 				input->current++;
 			}
-
-			int length = strlen(input->start) - strlen(input->current);
-			input->token = (char*)malloc(sizeof(char)*length+1);
-
-			strncpy(input->token, input->start, length);
-			input->token[length] = '\0';
-
-			input->start = input->current;
-			
-			printf("Word:     ");
-			return input->token;
+			printf("Word                ");
 		}
 
 		// Hex
@@ -118,17 +111,7 @@ char *TKGetNextToken(TokenizerT *input)
 			{
 				input->current++;
 			}
-
-			int length = strlen(input->start) - strlen(input->current);
-			input->token = (char*)malloc(sizeof(char)*length+1);
-
-			strncpy(input->token, input->start, length);
-			input->token[length] = '\0';
-
-			input->start = input->current;
-			
-			printf("Hex:      ");
-			return input->token;
+			printf("Hex                 ");
 		}
 
 		// Crappy Floating Point
@@ -140,17 +123,7 @@ char *TKGetNextToken(TokenizerT *input)
 			{
 				input->current++;
 			}
-
-			int length = strlen(input->start) - strlen(input->current);
-			input->token = (char*)malloc(sizeof(char)*length+1);
-
-			strncpy(input->token, input->start, length);
-			input->token[length] = '\0';
-
-			input->start = input->current;
-			
-			printf("Floating: ");
-			return input->token;
+			printf("Floating Point      ");
 		}
 
 		// Octal numbers
@@ -160,17 +133,7 @@ char *TKGetNextToken(TokenizerT *input)
 			{
 				input->current++;
 			}
-
-			int length = strlen(input->start) - strlen(input->current);
-			input->token = (char*)malloc(sizeof(char)*length+1);
-
-			strncpy(input->token, input->start, length);
-			input->token[length] = '\0';
-
-			input->start = input->current;
-			
-			printf("Octal:    ");
-			return input->token;
+			printf("Octal               ");
 		}
 
 		// Integers
@@ -180,7 +143,256 @@ char *TKGetNextToken(TokenizerT *input)
 			{
 				input->current++;
 			}
+			printf("Integer             ");
+		}
 
+		//C Operators
+		else if (input->current[0] == '(')
+		{
+			input->current++;
+			printf("Left Parenthesis    ");
+		}
+
+		else if (input->current[0] == ')')
+		{
+			input->current++;
+			printf("Right Parenthesis   ");
+		}
+
+		else if (input->current[0] == '[')
+		{
+			input->current++;
+			printf("Left Bracket        ");
+		}
+
+		else if (input->current[0] == ']')
+		{
+			input->current++;
+			printf("Right Bracket       ");
+		}
+
+		else if ((input->current[0] == '-') && (input->current[1] == '>'))
+		{
+			input->current+=2;
+			printf("Structure Pointer   ");
+		}
+
+		else if ((input->current[0] == '>') && (input->current[1] == '>') && (input->current[2] == '='))
+		{
+			input->current+=3;
+			printf("Right Shift Assn.   ");
+		}
+
+		else if ((input->current[0] == '<') && (input->current[1] == '<') && (input->current[2] == '='))
+		{
+			input->current+=3;
+			printf("Left Shift Assn.    ");
+		}
+
+		else if ((input->current[0] == '+') && (input->current[1] == '+'))
+		{
+			input->current+=2;
+			printf("Increment           ");
+		}
+
+		else if ((input->current[0] == '-') && (input->current[1] == '-'))
+		{
+			input->current+=2;
+			printf("Decrement           ");
+		}
+
+		else if ((input->current[0] == '>') && (input->current[1] == '>'))
+		{
+			input->current+=2;
+			printf("Right Shift         ");
+		}
+
+		else if ((input->current[0] == '<') && (input->current[1] == '<'))
+		{
+			input->current+=2;
+			printf("Left Shift          ");
+		}
+
+		else if ((input->current[0] == '<') && (input->current[1] == '='))
+		{
+			input->current+=2;
+			printf("Less Or Equal       ");
+		}
+
+		else if ((input->current[0] == '<') && (input->current[1] == '='))
+		{
+			input->current+=2;
+			printf("Greater Or Equal    ");
+		}
+
+		else if ((input->current[0] == '=') && (input->current[1] == '='))
+		{
+			input->current+=2;
+			printf("Equals              ");
+		}
+
+		else if ((input->current[0] == '!') && (input->current[1] == '='))
+		{
+			input->current+=2;
+			printf("Not Equals          ");
+		}
+
+		else if ((input->current[0] == '&') && (input->current[1] == '&'))
+		{
+			input->current+=2;
+			printf("Logical And         ");
+		}
+
+		else if ((input->current[0] == '|') && (input->current[1] == '|'))
+		{
+			input->current+=2;
+			printf("Logical Or          ");
+		}
+
+		else if ((input->current[0] == '+') && (input->current[1] == '='))
+		{
+			input->current+=2;
+			printf("Plus Equals         ");
+		}
+
+		else if ((input->current[0] == '-') && (input->current[1] == '='))
+		{
+			input->current+=2;
+			printf("Minus Equals        ");
+		}
+
+		else if ((input->current[0] == '*') && (input->current[1] == '='))
+		{
+			input->current+=2;
+			printf("Multiply Equals     ");
+		}
+
+		else if ((input->current[0] == '/') && (input->current[1] == '='))
+		{
+			input->current+=2;
+			printf("Divide Equals       ");
+		}
+
+		else if ((input->current[0] == '%') && (input->current[1] == '='))
+		{
+			input->current+=2;
+			printf("Modulus Equals      ");
+		}
+
+		else if ((input->current[0] == '&') && (input->current[1] == '='))
+		{
+			input->current+=2;
+			printf("And Equals          ");
+		}
+
+		else if ((input->current[0] == '^') && (input->current[1] == '='))
+		{
+			input->current+=2;
+			printf("Exclusive Or Equals ");
+		}
+
+		else if ((input->current[0] == '|') && (input->current[1] == '='))
+		{
+			input->current+=2;
+			printf("Inclusive Or Equals ");
+		}		
+
+		else if ((input->current[0] == '|') && (input->current[1] == '='))
+		{
+			input->current+=2;
+			printf("Inclusive Or Equals ");
+		}
+
+		else if (input->current[0] == '*')
+		{
+			input->current++;
+			printf("Pointer/Multiply    ");
+		}
+		else if (input->current[0] == '&')
+		{
+			input->current++;
+			printf("Address             ");
+		}
+		else if (input->current[0] == '-')
+		{
+			input->current++;
+			printf("Minus/Subtract      ");
+		}
+		else if (input->current[0] == '+')
+		{
+			input->current++;
+			printf("Add                 ");
+		}
+		else if (input->current[0] == '!')
+		{
+			input->current++;
+			printf("Negate              ");
+		}
+		else if (input->current[0] == '~')
+		{
+			input->current++;
+			printf("1's complement      ");
+		}
+		else if (input->current[0] == '/')
+		{
+			input->current++;
+			printf("Divide              ");
+		}
+		else if (input->current[0] == '%')
+		{
+			input->current++;
+			printf("Modulus             ");
+		}
+		else if (input->current[0] == '<')
+		{
+			input->current++;
+			printf("Less Than           ");
+		}
+		else if (input->current[0] == '>')
+		{
+			input->current++;
+			printf("Greater Than        ");
+		}
+		else if (input->current[0] == '&')
+		{
+			input->current++;
+			printf("Bitwise And         ");
+		}
+		else if (input->current[0] == '^')
+		{
+			input->current++;
+			printf("Bitwise Ex. Or      ");
+		}
+		else if (input->current[0] == '|')
+		{
+			input->current++;
+			printf("Bitwise Or          ");
+		}
+		else if ((input->current[0] == '?') && (input->current[1] == ':'))
+		{
+			input->current+=2;
+			printf("Conditional         ");
+		}
+		else if (input->current[0] == ',')
+		{
+			input->current++;
+			printf("Comma               ");
+		}
+		else if (input->current[0] == '=')
+		{
+			input->current++;
+			printf("Equals              ");
+		}
+
+		else 
+		{
+			printf("\nPROGRAM EXIT DUE TO ERROR: \"%c\" --> [0x%02X] \n", input->current[0], input->current[0]);
+			return NULL;
+		}
+
+		//Return token to main()
+		if (isASpace == 0)
+		{
 			int length = strlen(input->start) - strlen(input->current);
 			input->token = (char*)malloc(sizeof(char)*length+1);
 
@@ -189,17 +401,10 @@ char *TKGetNextToken(TokenizerT *input)
 
 			input->start = input->current;
 			
-			printf("Integer:  ");
 			return input->token;
 		}
-
-		else
-		{
-			printf("Exit because error\n");
-			return NULL;
-		}
+		isASpace = 0;
 	}
-	printf("\nExit because end of input reached\n");
 	return NULL;
 } 
 
@@ -225,7 +430,9 @@ int main(int argc, char **argv)
 	{
 		tokens = TKGetNextToken(input);
 		if (tokens != NULL)
-			printf("%s\n", tokens);
-	} 
+			printf("\"%s\"\n", tokens);
+	}
+
+	TKDestroy(input);
 	return 0;
 }
