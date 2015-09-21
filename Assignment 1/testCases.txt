@@ -1,0 +1,53 @@
+Ajay Srivastava (as1877)
+Srihari Chekuri (svc31)
+
+CS 214 Assignment 1: Tokenizer Test Cases:
+
+TEST CASE 1
+Input: "Hi 98Hi 0x234 0123 .93423"
+
+Output:
+Word                "Hi"
+Integer             "98"
+Word                "Hi"
+Hex                 "0x234"
+Octal               "0123"
+Floating Point      ".93423"
+
+TEST CASE 2
+Input:"sfsfs(**( {}sfsdg >>="
+
+Output:
+Word                "sfsfs"
+Left Parenthesis    "("
+Pointer/Multiply    "*"
+Pointer/Multiply    "*"
+Left Parenthesis    "("
+
+PROGRAM EXIT DUE TO ERROR: "{" --> [0x7B] 
+
+
+TEST CASE 3
+Input:"9*9*9+9 what te0x024"
+
+Output:
+Integer             "9"
+Pointer/Multiply    "*"
+Integer             "9"
+Pointer/Multiply    "*"
+Integer             "9"
+Add                 "+"
+Integer             "9"
+Word                "what"
+Word                "te0x024"
+
+TEST CASE 4
+Input:"0Xqwewwe 342dsfjs @$#"
+
+Output:
+Hex                 "0X"
+Word                "qwewwe"
+Integer             "342"
+Word                "dsfjs"
+
+PROGRAM EXIT DUE TO ERROR: "@" --> [0x40] 

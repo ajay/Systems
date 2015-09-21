@@ -486,7 +486,11 @@ char *TKGetNextToken(TokenizerT *input)
 			input->current++;
 			printf("Equals              ");
 		}
-
+		else if (input->current[0] == '.')
+		{
+			input->current++;
+			printf("Structure member    ");
+		}
 		else 
 		{
 			printf("\n\033[31mPROGRAM EXIT DUE TO ERROR: \"%c\" --> [0x%02X] \n\033[0m", input->current[0], input->current[0]);
