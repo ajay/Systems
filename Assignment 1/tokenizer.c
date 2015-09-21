@@ -61,9 +61,12 @@ TokenizerT *TKCreate(char *originalString)
 
 void TKDestroy(TokenizerT * tk)
 {
-	free(tk->inputString);
-	free(tk->token);
-	free(tk);
+	if (tk->inputString != NULL)
+		free(tk->inputString);
+	if (tk->token != NULL)
+		free(tk->token);
+	if (tk != NULL)
+		free(tk);
 }
 
 /*
@@ -78,6 +81,25 @@ void TKDestroy(TokenizerT * tk)
  * You need to fill in this function as part of your implementation.
  */
 
+ int hasPeriod(TokenizerT *input){
+ 	int hasPeriod = 0;
+ 	while((input->current[0] != 0x20) && (input->current[0] != 0x09) && (input->current[0] != 0x0b) && (input->current[0] != 0x0c) && (input->current[0] != 0x0a) && (input->current[0] != 0x0d) && (isdigit(input->current[0]) != 0 || input->current[0] == '.') && hasPeriod == 0)
+ 	{
+ 		if(input->current[0] == '.'){
+ 			hasPeriod = 1;
+ 		}
+ 		input->current++;
+ 	}
+ 	if(isdigit(input->current[0]) != 0){
+ 		input->current = input->start;
+ 		return 1;
+ 	}
+
+ 	input->current = input->start;
+ 	return 0;
+
+ }
+
 char *TKGetNextToken(TokenizerT *input) 
 {	
 	while ((input != NULL) && (input->start[0] != '\0'))
@@ -88,6 +110,22 @@ char *TKGetNextToken(TokenizerT *input)
 		// Skip spaces, etc.
 		if ((input->start[0] == 0x20) || (input->start[0] == 0x09) || (input->start[0] == 0x0b) || (input->start[0] == 0x0c) || (input->start[0] == 0x0a) || (input->start[0] == 0x0d))
 		{
+			if ((input->current[0] == '\a') ||
+				(input->current[0] == '\b') ||
+				(input->current[0] == '\f') ||
+				(input->current[0] == '\n') ||
+				(input->current[0] == '\r') ||
+				(input->current[0] == '\t') ||
+				(input->current[0] == '\v'))
+				 // (input->current[0] == '\\') ||
+				 // (input->current[0] == '\'') ||
+				 // (input->current[0] == '\"') ||
+				 // (input->current[0] == '\?')
+			{
+				printf("\033[31mERROR: ESCAPE CHAR [0x%02X]\033[0m\n", input->current[0]);
+				input->current+=2;
+			}
+
 			input->start++;
 			input->current++;
 			isASpace = 1;
@@ -145,16 +183,33 @@ char *TKGetNextToken(TokenizerT *input)
 		}
 
 		// Crappy Floating Point
-		else if(input->current[0] == '.')
+		else if(hasPeriod(input)==1)
 		{
-			input->current++;
-
-			while(isdigit(input->current[0]) != 0)
+			int newPeriod =0;
+			while((isdigit(input->current[0]) != 0 || input->current[0] == '.') && newPeriod == 0)
 			{
+				if(input->current[0] == '.')
+				{
+					newPeriod = 1;
+				}
 				input->current++;
 			}
+			while(isdigit(input->current[0]) != 0){
+				input->current++;
+			}
+
 			printf("Floating Point      ");
 		}
+		// else if(input->current[0] == '.')
+		// {
+		// 	input->current++;
+
+		// 	while(isdigit(input->current[0]) != 0)
+		// 	{
+		// 		input->current++;
+		// 	}
+		// 	printf("Floating Point      ");
+		// }
 
 		// Octal numbers
 		else if(input->current[0]== '0')
@@ -183,11 +238,12 @@ char *TKGetNextToken(TokenizerT *input)
 				 (input->current[0] == '\n') ||
 				 (input->current[0] == '\r') ||
 				 (input->current[0] == '\t') ||
-				 (input->current[0] == '\v') ||
-				 (input->current[0] == '\\') ||
-				 (input->current[0] == '\'') ||
-				 (input->current[0] == '\"') ||
-				 (input->current[0] == '\?'))
+				 (input->current[0] == '\v'))
+				 // (input->current[0] == '\\') ||
+				 // (input->current[0] == '\'') ||
+				 // (input->current[0] == '\"') ||
+				 // (input->current[0] == '\?')
+
 		{
 			printf("\033[31mERROR: ESCAPE CHAR [0x%02X]  -->\033[0m", input->current[0]);
 			input->current+=2;
