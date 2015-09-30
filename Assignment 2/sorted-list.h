@@ -1,19 +1,32 @@
 #ifndef SORTED_LIST_H
 #define SORTED_LIST_H
 /*
+ * Ajay Srivastava (as1877) & Srihari Chekuri (svc31)
  * sorted-list.h
  */
 
 #include <stdlib.h>
+#include <stdbool.h>
+
+struct Iterator
+{
+	struct Iterator *next;
+	void *data;
+//	int count;
+//	bool exists;
+};
+typedef struct Iterator *Node;
 
 /*
  * Sorted list type.  You need to fill in the type as part of your implementation.
  */
 struct SortedList
 {
+	Node front;
+	CompareFuncT comparator;
+	DestructFuncT destroyer;
 };
-typedef struct SortedList* SortedListPtr;
-
+typedef struct SortedList *SortedListPtr;
 
 /*
  * Iterator type for user to "walk" through the list item by item, from
@@ -21,9 +34,9 @@ typedef struct SortedList* SortedListPtr;
  */
 struct SortedListIterator
 {
+	Node current;
 };
-typedef struct SortedListIterator* SortedListIteratorPtr;
-
+typedef struct SortedListIterator *SortedListIteratorPtr;
 
 /*
  * When your sorted list is used to store objects of some type, since the
@@ -38,9 +51,8 @@ typedef struct SortedListIterator* SortedListIteratorPtr;
  * functions.  You will be given a comparator function and a destruct
  * function when a new sorted list is created.
  */
-
-typedef int (*CompareFuncT)( void *, void * );
-typedef void (*DestructFuncT)( void * );
+typedef int (*CompareFuncT)(void*, void*);
+typedef void (*DestructFuncT)(void*);
 
 /*
  * SLCreate creates a new, empty sorted list.  The caller must provide
@@ -53,7 +65,6 @@ typedef void (*DestructFuncT)( void * );
  *
  * You need to fill in this function as part of your implementation.
  */
-
 SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df);
 
 /*
@@ -62,7 +73,6 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df);
  * You need to fill in this function as part of your implementation.
  */
 void SLDestroy(SortedListPtr list);
-
 
 /*
  * SLInsert inserts a given object into a sorted list, maintaining sorted
@@ -73,9 +83,7 @@ void SLDestroy(SortedListPtr list);
  *
  * You need to fill in this function as part of your implementation.
  */
-
 int SLInsert(SortedListPtr list, void *newObj);
-
 
 /*
  * SLRemove removes a given object from a sorted list.  Sorted ordering
@@ -88,9 +96,7 @@ int SLInsert(SortedListPtr list, void *newObj);
  *
  * You need to fill in this function as part of your implementation.
  */
-
 int SLRemove(SortedListPtr list, void *newObj);
-
 
 /*
  * SLCreateIterator creates an iterator object that will allow the caller
@@ -104,9 +110,7 @@ int SLRemove(SortedListPtr list, void *newObj);
  *
  * You need to fill in this function as part of your implementation.
  */
-
 SortedListIteratorPtr SLCreateIterator(SortedListPtr list);
-
 
 /*
  * SLDestroyIterator destroys an iterator object that was created using
@@ -116,9 +120,7 @@ SortedListIteratorPtr SLCreateIterator(SortedListPtr list);
  *
  * You need to fill in this function as part of your implementation.
  */
-
 void SLDestroyIterator(SortedListIteratorPtr iter);
-
 
 /*
  * SLGetItem returns the pointer to the data associated with the
@@ -127,8 +129,7 @@ void SLDestroyIterator(SortedListIteratorPtr iter);
  * 
  * You need to fill in this function as part of your implementation.
 */
-
-void * SLGetItem( SortedListIteratorPtr iter );
+void *SLGetItem( SortedListIteratorPtr iter );
 
 /*
  * SLNextItem returns the pointer to the data associated with the
@@ -144,7 +145,6 @@ void * SLGetItem( SortedListIteratorPtr iter );
  *
  * You need to fill in this function as part of your implementation.
  */
-
-void * SLNextItem(SortedListIteratorPtr iter);
+void *SLNextItem(SortedListIteratorPtr iter);
 
 #endif
