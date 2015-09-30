@@ -1,13 +1,14 @@
 CC = gcc
 
-CFLAGS = -Wall
+CFLAGS = -Wall -g
 
-MAIN: main
-
-all: $(MAIN)
-
-$(MAIN): $(MAIN).c
-	$(CC) $(CFLAGS) -o $(MAIN) $(MAIN).c
+all: sorted-list.c sorted-list.h main.c
+	clear
+	$(CC) $(CFLAGS) -c sorted-list.c
+	$(CC) $(CFLAGS) -o main main.c
+	@echo "./main\n"
+	@./main
+	@echo
 
 clean:
-	$(RM) $(TARGET)
+	rm -f main sorted-list.o

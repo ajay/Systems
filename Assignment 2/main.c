@@ -6,10 +6,9 @@
 #include <stdio.h>
 #include "sorted-list.h"
 
- 
-
 int main(int argc, char **argv)
 {
-    printf("Hello world Makefile DUNDUNDUN ...\n");
+    printf("This is the main file\n");
+//    SortedListPtr test = SLCreate(NULL, NULL);
     return 0;
 }

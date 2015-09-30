@@ -23,8 +23,8 @@ typedef struct Iterator *Node;
 struct SortedList
 {
 	Node front;
-	CompareFuncT comparator;
-	DestructFuncT destroyer;
+	// CompareFuncT comparator;
+	// DestructFuncT destroyer;
 };
 typedef struct SortedList *SortedListPtr;
 
