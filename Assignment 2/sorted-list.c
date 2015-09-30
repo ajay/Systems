@@ -20,7 +20,6 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df)
 		printf("The destructor function is missing\n");
 		return NULL;
 	}
-
 	return NULL;
 }
 
