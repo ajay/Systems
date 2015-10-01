@@ -8,7 +8,6 @@
 
 SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df)
 {
-	printf("Test123\n");
 	if (cf == NULL)
 	{
 		printf("The comparator function is missing\n");
@@ -20,11 +19,28 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df)
 		printf("The destructor function is missing\n");
 		return NULL;
 	}
-	return NULL;
+
+	SortedListPtr list = (SortedListPtr) malloc(sizeof(struct SortedList));
+	list->head = NULL;
+	list->compare = cf;
+	list->destroy = df;
+	return list;
 }
 
 void SLDestroy(SortedListPtr list)
 {
+	if (list == NULL)
+		return;
+
+	Node nodeToDelete;
+	while (list->head != NULL)
+	{
+		nodeToDelete = list->head;
+		list->head = list->head->next;
+		list->destroy(nodeToDelete->data);
+		free(nodeToDelete);
+	}
+	free(list);
 }
 
 int SLInsert(SortedListPtr list, void *newObj)

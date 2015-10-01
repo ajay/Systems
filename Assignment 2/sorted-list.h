@@ -1,42 +1,13 @@
-#ifndef SORTED_LIST_H
-#define SORTED_LIST_H
 /*
  * Ajay Srivastava (as1877) & Srihari Chekuri (svc31)
  * sorted-list.h
  */
 
+#ifndef SORTED_LIST_H
+#define SORTED_LIST_H
+
 #include <stdlib.h>
 #include <stdbool.h>
-
-struct Iterator
-{
-	struct Iterator *next;
-	void *data;
-//	int count;
-//	bool exists;
-};
-typedef struct Iterator *Node;
-
-/*
- * Sorted list type.  You need to fill in the type as part of your implementation.
- */
-struct SortedList
-{
-	Node front;
-	// CompareFuncT comparator;
-	// DestructFuncT destroyer;
-};
-typedef struct SortedList *SortedListPtr;
-
-/*
- * Iterator type for user to "walk" through the list item by item, from
- * beginning to end.  You need to fill in the type as part of your implementation.
- */
-struct SortedListIterator
-{
-	Node current;
-};
-typedef struct SortedListIterator *SortedListIteratorPtr;
 
 /*
  * When your sorted list is used to store objects of some type, since the
@@ -53,6 +24,36 @@ typedef struct SortedListIterator *SortedListIteratorPtr;
  */
 typedef int (*CompareFuncT)(void*, void*);
 typedef void (*DestructFuncT)(void*);
+
+struct Iterator
+{
+	struct Iterator *next;
+	void *data;
+//	int count;
+//	bool exists;
+};
+typedef struct Iterator *Node;
+
+/*
+ * Sorted list type.  You need to fill in the type as part of your implementation.
+ */
+struct SortedList
+{
+	Node head;
+	CompareFuncT compare;
+	DestructFuncT destroy;
+};
+typedef struct SortedList *SortedListPtr;
+
+/*
+ * Iterator type for user to "walk" through the list item by item, from
+ * beginning to end.  You need to fill in the type as part of your implementation.
+ */
+struct SortedListIterator
+{
+	Node current;
+};
+typedef struct SortedListIterator *SortedListIteratorPtr;
 
 /*
  * SLCreate creates a new, empty sorted list.  The caller must provide
