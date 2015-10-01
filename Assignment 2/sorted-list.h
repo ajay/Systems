@@ -7,7 +7,7 @@
 #define SORTED_LIST_H
 
 #include <stdlib.h>
-#include <stdbool.h>
+//#include <stdbool.h>
 
 /*
  * When your sorted list is used to store objects of some type, since the
@@ -25,21 +25,21 @@
 typedef int (*CompareFuncT)(void*, void*);
 typedef void (*DestructFuncT)(void*);
 
-struct Iterator
+struct Node
 {
-	struct Iterator *next;
+	struct Node *next;
 	void *data;
 //	int count;
 //	bool exists;
 };
-typedef struct Iterator *Node;
+typedef struct Node *NodePointer;
 
 /*
  * Sorted list type.  You need to fill in the type as part of your implementation.
  */
 struct SortedList
 {
-	Node head;
+	NodePointer head;
 	CompareFuncT compare;
 	DestructFuncT destroy;
 };
@@ -51,7 +51,7 @@ typedef struct SortedList *SortedListPtr;
  */
 struct SortedListIterator
 {
-	Node current;
+	NodePointer current;
 };
 typedef struct SortedListIterator *SortedListIteratorPtr;
 

@@ -10,7 +10,14 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df)
 {
 	if (cf == NULL)
 	{
-		printf("The comparator function is missing\n");
+		if (df == NULL)
+		{
+			printf("The comparator and destructor functions are missing\n");
+		}
+		else
+		{
+			printf("The comparator function is missing\n");
+		}
 		return NULL;
 	}
 
@@ -32,7 +39,7 @@ void SLDestroy(SortedListPtr list)
 	if (list == NULL)
 		return;
 
-	Node nodeToDelete;
+	NodePointer nodeToDelete;
 	while (list->head != NULL)
 	{
 		nodeToDelete = list->head;
@@ -43,8 +50,33 @@ void SLDestroy(SortedListPtr list)
 	free(list);
 }
 
+// Return 1 if Succsessful, 0 if insert failed
 int SLInsert(SortedListPtr list, void *newObj)
 {
+	if (list == NULL)
+	{
+		printf("The list given to SLInsert was NULL\n");
+		return 0;
+	}
+
+	NodePointer nodeToInsert = (NodePointer) malloc(sizeof(struct Node));
+	nodeToInsert->next = NULL;
+	nodeToInsert->data = newObj;
+
+	if (list->head == NULL)
+	{
+		list->head = nodeToInsert;
+		return 1;
+	}
+
+	NodePointer tempNode;
+
+	while (list->head != NULL)
+	{
+		tempNode = list->head;
+		list->head = list->head->next;
+	}
+
 	return 0;
 }
 
