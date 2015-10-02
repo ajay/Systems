@@ -1,16 +1,15 @@
 CC = gcc
-
 CFLAGS = -Wall -g
+COMPILE = $(CC) $(CFLAGS)
 
-all: sorted-list.c sorted-list.h main.c
-	clear
-	$(CC) $(CFLAGS) -c sorted-list.c
-	$(CC) $(CFLAGS) -c main.c
-	$(CC) $(CFLAGS) -o main main.o sorted-list.o
-	@echo "COMPILED SUCCESSFULLY"
-	@echo "./main\n"
-	@./main
-	@echo
+sl: libsl.a main.c
+	$(COMPILE) -o sl main.c libsl.a
+
+libsl.a: sorted-list.o
+	ar rv libsl.a sorted-list.o
+
+sorted-list.o: sorted-list.c sorted-list.h
+	$(COMPILE) -c sorted-list.c
 
 clean:
-	rm -f main main.o sorted-list.o
+	rm -rfv sl sorted-list.o libsl.a

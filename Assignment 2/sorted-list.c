@@ -69,13 +69,21 @@ int SLInsert(SortedListPtr list, void *newObj)
 		return 1;
 	}
 
-	NodePointer tempNode;
-
 	while (list->head != NULL)
 	{
-		tempNode = list->head;
+		NodePointer tempNode = list->head;
+		
+
+
+
+
+
 		list->head = list->head->next;
 	}
+
+
+
+
 
 	return 0;
 }
