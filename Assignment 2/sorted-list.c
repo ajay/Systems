@@ -12,18 +12,18 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df)
     {
         if (df == NULL)
         {
-            printf("The comparator and destructor functions are missing\n");
+            printf("ERROR: The comparator and destructor functions are missing\n");
         }
         else
         {
-            printf("The comparator function is missing\n");
+            printf("ERROR: The comparator function is missing\n");
         }
         return NULL;
     }
     
     if (df == NULL)
     {
-        printf("The destructor function is missing\n");
+        printf("ERROR: The destructor function is missing\n");
         return NULL;
     }
     
@@ -31,7 +31,8 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df)
     
     if(list == NULL)
     {
-        return NULL;  /*Returns null if there is no memory left to be allocated*/
+        printf("ERROR: There was no memory to be allocated for the new sorted list\n");
+        return NULL;
     }
     
     list->head = NULL;
@@ -61,7 +62,7 @@ int SLInsert(SortedListPtr list, void *newObj)
 {
     if (list == NULL)
     {
-        printf("The list given to SLInsert was \'NULL\'\n");
+        printf("ERROR: The list given to SLInsert was \'NULL\'\n");
         return 0;
     }
     
@@ -80,67 +81,112 @@ int SLInsert(SortedListPtr list, void *newObj)
     }
     
     NodePointer prevNode = NULL;
-    NodePointer currNode = list->head;
+    NodePointer nodeToRemove = list->head;
     
-    while (currNode != NULL)
+    while (nodeToRemove != NULL)
     {
-        if(list->compare(currNode->data, nodeToInsert->data) == 0) /* Don't need to insert the same data again */
+
+        if(list->compare(nodeToRemove->data, nodeToInsert->data) == 0)
         {
-            list->destroy(nodeToInsert->data); //to hide the data
+            list->destroy(nodeToInsert->data);
             free(nodeToInsert);
+            printf("ERROR: The data to insert was already present in the list\n");
             return 0;
         }
-        else if(list->compare(currNode->data, nodeToInsert->data) == -1)
+        else if(list->compare(nodeToRemove->data, nodeToInsert->data) == -1)
         {
             break;
         }
-        prevNode = currNode;
-        currNode = currNode->next;
+        prevNode = nodeToRemove;
+        nodeToRemove = nodeToRemove->next;
     }
     
-    if(currNode == list->head) /*node to insert is at the start*/
+    // New node will become new head
+    if(nodeToRemove == list->head)
     {
         list->head = nodeToInsert;
-        list->head->isHead = 1;
+        list->head->next= nodeToRemove;
         list->head->numberOfPointers++;
-        currNode->isHead = 0;
-        list->head->next= currNode;
+        list->head->isHead = 1;
+        nodeToRemove->isHead = 0;
         return 1;
     }
-    else if(currNode == NULL) /* node to insert is at the end*/
+
+    // Node to insert is the new last node
+    else if(nodeToRemove == NULL) 
     {
         prevNode->next = nodeToInsert;
         nodeToInsert->numberOfPointers++;
         return 1;
     }
-    else /*node to insert is in the middle*/
+
+    // General case, node to insert is in the middle
+    else
     {
-        nodeToInsert->next = currNode;
+        nodeToInsert->next = nodeToRemove;
         nodeToInsert->numberOfPointers++;
         prevNode->next = nodeToInsert;
         return 1;
     }
+
+    printf("ERROR: There was an unknown error in SLInsert\n");
     return 0;
 }
-/*Remove object which contains the given data*/
+
+// Remove object which contains the given data
 int SLRemove(SortedListPtr list, void *newObj)
 {
-     if(list == NULL || newObj == NULL)/*If there is nothing to delete return 0*/
-     {
-         return 0;
-     }
+    if (list == NULL)
+    {
+        printf("ERROR: There was no list given\n");
+        return 0;
+    }
+
+    if (newObj == NULL)
+    {
+        printf("ERROR: There was no data given\n");
+        return 0;
+    }
     
-     NodePointer prevNode = NULL;
-     NodePointer currNode = list->head;
+    NodePointer prevNode = NULL;
+    NodePointer nodeToRemove = list->head;
     
-     if(list->head->data == newObj)
-     {
-         list->head = list->head->next;
-         list->head->numberOfPointers--;
-         list->destroy(currNode->data);
-         free(currNode);
-         return 1;
-     }
+    // Case where head needs to be removed
+    if(nodeToRemove->data == newObj)
+    {
+        list->head = list->head->next;
+        list->head->isHead = 1;
+
+        nodeToRemove->numberOfPointers--;
+
+        if (nodeToRemove->numberOfPointers == 0)
+        {
+            list->destroy(nodeToRemove->data);
+            free(nodeToRemove);
+        }
+
+        return 1;
+    }
+
+    // Case where object to remove is in the middle or end
+    while (nodeToRemove != NULL)
+    {
+        if(nodeToRemove->data == newObj)
+        {
+            prevNode->next = nodeToRemove->next;
+            nodeToRemove->numberOfPointers--;
+            if (nodeToRemove->numberOfPointers == 0)
+            {
+                list->destroy(nodeToRemove->data);
+                free(nodeToRemove);
+            }
+            return 1;
+        }
+        prevNode = nodeToRemove;
+        nodeToRemove = nodeToRemove->next;
+    }
+
+    printf("ERROR: Object to remove not found in list\n");
     return 0;
 }
 

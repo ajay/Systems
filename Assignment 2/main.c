@@ -20,32 +20,21 @@ int compareInts(void *pOne, void *pTwo)
 	return (one - two);
 }
 
-int compareStrings(void *p1, void *p2)
+void destroy(void *data)
 {
-	char *s1 = p1;
-	char *s2 = p2;
-
-	return strcmp(s1, s2);
+	printf("I DESTROYED THE DATA\n");
+	return;
 }
 
 int main(int argc, char **argv)
 {
     printf("This is the main file\n");
-    // SortedListPtr test = SLCreate(NULL, NULL);
-    
+    // SortedListPtr testList = SLCreate(compareInts, destroy);
+
+
+    // int intArray[] = 
 
 
 
-	const char * stringArray[] = {"Tom", "Jerry"};
-	void *printer;
-	SortedListPtr sl2 = SLCreate(compareStrings, destroyBasicTypeNoAlloc);
-	int i;
-	
-	for(i=0; i<(sizeof(stringArray)/sizeof(stringArray[0])); i++){
-		if(SLInsert(sl2, (void *)stringArray[i])==0)
-			printf("There was an error\n");
-	}
-
-
-    return 0;
+	return 0;
 }
