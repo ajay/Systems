@@ -74,23 +74,22 @@ int SLInsert(SortedListPtr list, void *newObj)
     if (list->head == NULL)
     {
         list->head = nodeToInsert;
-        list->front = 1;
+        list->head->front = 1;
         return 1;
     }
     
     NodePointer prevNode = NULL;
     NodePointer currNode = list->head;
     
-    
     while (currNode != NULL)
     {
-        if(currNode->compare(currNode->data, nodeToInsert->data) == 0) // Don't need to insert the same data again
+        if(list->compare(currNode->data, nodeToInsert->data) == 0) // Don't need to insert the same data again
         {
             list->destroy(nodeToInsert->data); //to hide the data
             free(nodeToInsert);
             return 0;
         }
-        else if(currNode->compare(currNode->data, nodeToInsert->data) == -1)
+        else if(list->compare(currNode->data, nodeToInsert->data) == -1)
         {
             break;
         }
@@ -115,9 +114,9 @@ int SLInsert(SortedListPtr list, void *newObj)
     }
     else /*node to insert is in the middle*/
     {
-        nodeToInsert.next = currNode;
-        nodeToInsert.count++;
-        prevNode.next = nodeToInsert;
+        nodeToInsert->next = currNode;
+        nodeToInsert->count++;
+        prevNode->next = nodeToInsert;
         return 1;
     }
     
@@ -128,22 +127,22 @@ int SLInsert(SortedListPtr list, void *newObj)
 /*Remove object which contains the given data*/
 int SLRemove(SortedListPtr list, void *newObj)
 {
-    if(list == NULL || newObj == NULL)/*If there is nothing to delete return 0*/
-    {
-        return 0;
-    }
+    // if(list == NULL || newObj == NULL)/*If there is nothing to delete return 0*/
+    // {
+    //     return 0;
+    // }
     
-    NodePointer prevNode = NULL;
-    NodePointer currNode = list->head;
+    // NodePointer prevNode = NULL;
+    // NodePointer currNode = list->head;
     
-    if(list->head->data == newObj)
-    {
-        list->head = list->head->next;
-        list->head->count--;
-        list->destroy(currNode->data);
-        free(currNode);
-        return 1;
-    }
+    // if(list->head->data == newObj)
+    // {
+    //     list->head = list->head->next;
+    //     list->head->count--;
+    //     list->destroy(currNode->data);
+    //     free(currNode);
+    //     return 1;
+    // }
     return 0;
 }
 

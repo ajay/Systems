@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include "sorted-list.h"
 
 /* 
@@ -19,9 +20,32 @@ int compareInts(void *pOne, void *pTwo)
 	return (one - two);
 }
 
+int compareStrings(void *p1, void *p2)
+{
+	char *s1 = p1;
+	char *s2 = p2;
+
+	return strcmp(s1, s2);
+}
+
 int main(int argc, char **argv)
 {
     printf("This is the main file\n");
     // SortedListPtr test = SLCreate(NULL, NULL);
+    
+
+
+
+	const char * stringArray[] = {"Tom", "Jerry"};
+	void *printer;
+	SortedListPtr sl2 = SLCreate(compareStrings, destroyBasicTypeNoAlloc);
+	int i;
+	
+	for(i=0; i<(sizeof(stringArray)/sizeof(stringArray[0])); i++){
+		if(SLInsert(sl2, (void *)stringArray[i])==0)
+			printf("There was an error\n");
+	}
+
+
     return 0;
 }
