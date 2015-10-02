@@ -65,6 +65,12 @@ int SLInsert(SortedListPtr list, void *newObj)
         printf("ERROR: The list given to SLInsert was \'NULL\'\n");
         return 0;
     }
+
+    if (newObj == NULL)
+    {
+        printf("ERROR U GAaY");
+        return 0;
+    }
     
     NodePointer nodeToInsert = (NodePointer) malloc(sizeof(struct Node));
     nodeToInsert->next = NULL;
@@ -239,8 +245,18 @@ void SLDestroyIterator(SortedListIteratorPtr iterator)
     free(iterator);
 }
 
-void *SLGetItem(SortedListIteratorPtr iter)
+void *SLGetItem(SortedListIteratorPtr iterator)
 {
+    if(iterator == NULL)
+    {
+        return NULL;
+    }
+    else if(iterator->currentNode == NULL)
+    {
+        printf("Stop trying stupid stuff, dumbass. Don't you have other stuff to do in life. \n");
+        return NULL;
+    }
+    return iterator->currentNode->data;
     return NULL;
 }
 
