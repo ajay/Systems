@@ -75,6 +75,7 @@ int SLInsert(SortedListPtr list, void *newObj)
     {
         list->head = nodeToInsert;
         list->head->front = 1;
+        list->head->count = 1;
         return 1;
     }
     
@@ -83,7 +84,7 @@ int SLInsert(SortedListPtr list, void *newObj)
     
     while (currNode != NULL)
     {
-        if(list->compare(currNode->data, nodeToInsert->data) == 0) // Don't need to insert the same data again
+        if(list->compare(currNode->data, nodeToInsert->data) == 0) /* Don't need to insert the same data again */
         {
             list->destroy(nodeToInsert->data); //to hide the data
             free(nodeToInsert);
@@ -102,7 +103,6 @@ int SLInsert(SortedListPtr list, void *newObj)
         list->head = nodeToInsert;
         list->head->front = 1;
         currNode->front = 0;
-        currNode->count++;
         list->head->next= currNode;
         return 1;
     }
@@ -119,30 +119,27 @@ int SLInsert(SortedListPtr list, void *newObj)
         prevNode->next = nodeToInsert;
         return 1;
     }
-    
     return 0;
-    
-    
 }
 /*Remove object which contains the given data*/
 int SLRemove(SortedListPtr list, void *newObj)
 {
-    // if(list == NULL || newObj == NULL)/*If there is nothing to delete return 0*/
-    // {
-    //     return 0;
-    // }
+     if(list == NULL || newObj == NULL)/*If there is nothing to delete return 0*/
+     {
+         return 0;
+     }
     
-    // NodePointer prevNode = NULL;
-    // NodePointer currNode = list->head;
+     NodePointer prevNode = NULL;
+     NodePointer currNode = list->head;
     
-    // if(list->head->data == newObj)
-    // {
-    //     list->head = list->head->next;
-    //     list->head->count--;
-    //     list->destroy(currNode->data);
-    //     free(currNode);
-    //     return 1;
-    // }
+     if(list->head->data == newObj)
+     {
+         list->head = list->head->next;
+         list->head->count--;
+         list->destroy(currNode->data);
+         free(currNode);
+         return 1;
+     }
     return 0;
 }
 
