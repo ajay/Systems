@@ -61,21 +61,21 @@ int SLInsert(SortedListPtr list, void *newObj)
 {
     if (list == NULL)
     {
-        printf("The list given to SLInsert was NULL\n");
+        printf("The list given to SLInsert was \'NULL\'\n");
         return 0;
     }
     
     NodePointer nodeToInsert = (NodePointer) malloc(sizeof(struct Node));
     nodeToInsert->next = NULL;
     nodeToInsert->data = newObj;
-    nodeToInsert->count = 0;
-    nodeToInsert->front = 0;
+    nodeToInsert->numberOfPointers = 0;
+    nodeToInsert->isHead = 0;
     
     if (list->head == NULL)
     {
         list->head = nodeToInsert;
-        list->head->front = 1;
-        list->head->count = 1;
+        list->head->isHead = 1;
+        list->head->numberOfPointers = 1;
         return 1;
     }
     
@@ -101,21 +101,22 @@ int SLInsert(SortedListPtr list, void *newObj)
     if(currNode == list->head) /*node to insert is at the start*/
     {
         list->head = nodeToInsert;
-        list->head->front = 1;
-        currNode->front = 0;
+        list->head->isHead = 1;
+        list->head->numberOfPointers++;
+        currNode->isHead = 0;
         list->head->next= currNode;
         return 1;
     }
     else if(currNode == NULL) /* node to insert is at the end*/
     {
         prevNode->next = nodeToInsert;
-        nodeToInsert->count++;
+        nodeToInsert->numberOfPointers++;
         return 1;
     }
     else /*node to insert is in the middle*/
     {
         nodeToInsert->next = currNode;
-        nodeToInsert->count++;
+        nodeToInsert->numberOfPointers++;
         prevNode->next = nodeToInsert;
         return 1;
     }
@@ -135,7 +136,7 @@ int SLRemove(SortedListPtr list, void *newObj)
      if(list->head->data == newObj)
      {
          list->head = list->head->next;
-         list->head->count--;
+         list->head->numberOfPointers--;
          list->destroy(currNode->data);
          free(currNode);
          return 1;
