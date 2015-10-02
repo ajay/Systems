@@ -52,7 +52,7 @@ typedef struct SortedList *SortedListPtr;
  */
 struct SortedListIterator
 {
-	NodePointer current;
+	NodePointer currentNode;
 };
 typedef struct SortedListIterator *SortedListIteratorPtr;
 
@@ -131,7 +131,7 @@ void SLDestroyIterator(SortedListIteratorPtr iter);
  * 
  * You need to fill in this function as part of your implementation.
 */
-void *SLGetItem( SortedListIteratorPtr iter );
+void *SLGetItem(SortedListIteratorPtr iter);
 
 /*
  * SLNextItem returns the pointer to the data associated with the

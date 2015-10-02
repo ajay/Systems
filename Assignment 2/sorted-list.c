@@ -80,40 +80,44 @@ int SLInsert(SortedListPtr list, void *newObj)
         return 1;
     }
     
+    // NodePointer prevNode = (NodePointer) malloc(sizeof(struct Node));
     NodePointer prevNode = NULL;
-    NodePointer nodeToRemove = list->head;
-    
-    while (nodeToRemove != NULL)
-    {
+    // NodePointer currentNode = (NodePointer) malloc(sizeof(struct Node));
+    NodePointer currentNode = list->head;
 
-        if(list->compare(nodeToRemove->data, nodeToInsert->data) == 0)
+    while (currentNode != NULL)
+    {
+        if(list->compare(currentNode->data, nodeToInsert->data) == 0)
         {
             list->destroy(nodeToInsert->data);
             free(nodeToInsert);
             printf("ERROR: The data to insert was already present in the list\n");
             return 0;
         }
-        else if(list->compare(nodeToRemove->data, nodeToInsert->data) == -1)
+
+        if(list->compare(currentNode->data, nodeToInsert->data) == -1)
         {
+            printf("I reached here\n");
             break;
         }
-        prevNode = nodeToRemove;
-        nodeToRemove = nodeToRemove->next;
+        
+        prevNode = currentNode;
+        currentNode = currentNode->next;
     }
     
     // New node will become new head
-    if(nodeToRemove == list->head)
+    if(currentNode == list->head)
     {
         list->head = nodeToInsert;
-        list->head->next= nodeToRemove;
+        list->head->next= currentNode;
         list->head->numberOfPointers++;
         list->head->isHead = 1;
-        nodeToRemove->isHead = 0;
+        currentNode->isHead = 0;
         return 1;
     }
 
     // Node to insert is the new last node
-    else if(nodeToRemove == NULL) 
+    else if(currentNode == NULL) 
     {
         prevNode->next = nodeToInsert;
         nodeToInsert->numberOfPointers++;
@@ -123,7 +127,7 @@ int SLInsert(SortedListPtr list, void *newObj)
     // General case, node to insert is in the middle
     else
     {
-        nodeToInsert->next = nodeToRemove;
+        nodeToInsert->next = currentNode;
         nodeToInsert->numberOfPointers++;
         prevNode->next = nodeToInsert;
         return 1;
@@ -155,7 +159,11 @@ int SLRemove(SortedListPtr list, void *newObj)
     if(nodeToRemove->data == newObj)
     {
         list->head = list->head->next;
-        list->head->isHead = 1;
+        
+        if (list->head != NULL)
+        {
+            list->head->isHead = 1;
+        }
 
         nodeToRemove->numberOfPointers--;
 
@@ -192,11 +200,43 @@ int SLRemove(SortedListPtr list, void *newObj)
 
 SortedListIteratorPtr SLCreateIterator(SortedListPtr list)
 {
-    return NULL;
+    if(list == NULL)
+    {
+        printf("ERROR: The list given to SLCreateIterator was \'NULL\' (not allocated)\n");
+        return NULL;
+    }
+
+    if(list->head == NULL)
+    {
+        printf("ERROR: The list given to SLCreateIterator was empty'\n");
+        return NULL;
+    }
+
+    SortedListIteratorPtr iterator = (SortedListIteratorPtr) malloc(sizeof(struct SortedListIterator));
+    iterator->currentNode = list->head;
+    list->head->numberOfPointers++;
+
+    return iterator;
 }
 
-void SLDestroyIterator(SortedListIteratorPtr iter)
+void SLDestroyIterator(SortedListIteratorPtr iterator)
 {
+    //get rid of data in itertaor, then get rid of iterator, then decrease number of pointers,
+    if(iterator == NULL)
+    {
+        printf("ERROR: The iterator given to SLDestroyIterator was \'NULL\'\n");
+        return;
+    }
+
+    iterator->currentNode->numberOfPointers--;
+
+    if(iterator->currentNode->numberOfPointers == 0)
+    {
+        // list->destroy(iterator->currentNode->data);
+        free(iterator->currentNode);
+    }
+
+    free(iterator);
 }
 
 void *SLGetItem(SortedListIteratorPtr iter)
