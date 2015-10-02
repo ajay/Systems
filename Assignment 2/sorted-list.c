@@ -87,7 +87,7 @@ int SLInsert(SortedListPtr list, void *newObj)
 
     while (currentNode != NULL)
     {
-        if(list->compare(currentNode->data, nodeToInsert->data) == 0)
+        if(list->compare(currentNode->data, newObj) == 0)
         {
             list->destroy(nodeToInsert->data);
             free(nodeToInsert);
@@ -95,7 +95,7 @@ int SLInsert(SortedListPtr list, void *newObj)
             return 0;
         }
 
-        if(list->compare(currentNode->data, nodeToInsert->data) == -1)
+        if(list->compare(currentNode->data, newObj) == -1)
         {
             printf("I reached here\n");
             break;
