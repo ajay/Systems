@@ -29,7 +29,8 @@ struct Node
 {
 	struct Node *next;
 	void *data;
-//	int count;
+	int count;
+    int front;
 //	bool exists;
 };
 typedef struct Node *NodePointer;
