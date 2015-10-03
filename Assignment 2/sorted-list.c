@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include "sorted-list.h"
 
 SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df)
@@ -29,7 +30,7 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df)
     
     SortedListPtr list = (SortedListPtr) malloc(sizeof(struct SortedList));
     
-    if(list == NULL)
+    if (list == NULL)
     {
         printf("ERROR: There was no memory to be allocated for the new sorted list\n");
         return NULL;
@@ -45,7 +46,7 @@ void SLDestroy(SortedListPtr list)
 {
     if (list == NULL)
         return;
-    
+
     NodePointer nodeToDelete;
     while (list->head != NULL)
     {
@@ -76,24 +77,20 @@ int SLInsert(SortedListPtr list, void *newObj)
     nodeToInsert->next = NULL;
     nodeToInsert->data = newObj;
     nodeToInsert->numberOfPointers = 0;
-    nodeToInsert->isHead = 0;
-    
+
     if (list->head == NULL)
     {
         list->head = nodeToInsert;
-        list->head->isHead = 1;
         list->head->numberOfPointers = 1;
         return 1;
     }
     
-    // NodePointer prevNode = (NodePointer) malloc(sizeof(struct Node));
     NodePointer prevNode = NULL;
-    // NodePointer currentNode = (NodePointer) malloc(sizeof(struct Node));
     NodePointer currentNode = list->head;
 
     while (currentNode != NULL)
     {
-        if(list->compare(currentNode->data, newObj) == 0)
+        if (list->compare(currentNode->data, newObj) == 0)
         {
             list->destroy(nodeToInsert->data);
             free(nodeToInsert);
@@ -101,9 +98,8 @@ int SLInsert(SortedListPtr list, void *newObj)
             return 0;
         }
 
-        if(list->compare(currentNode->data, newObj) == -1)
+        if (list->compare(currentNode->data, newObj) <= -1)
         {
-            printf("I reached here\n");
             break;
         }
         
@@ -112,18 +108,16 @@ int SLInsert(SortedListPtr list, void *newObj)
     }
     
     // New node will become new head
-    if(currentNode == list->head)
+    if (currentNode == list->head)
     {
         list->head = nodeToInsert;
         list->head->next= currentNode;
         list->head->numberOfPointers++;
-        list->head->isHead = 1;
-        currentNode->isHead = 0;
         return 1;
     }
 
     // Node to insert is the new last node
-    else if(currentNode == NULL) 
+    else if (currentNode == NULL) 
     {
         prevNode->next = nodeToInsert;
         nodeToInsert->numberOfPointers++;
@@ -162,15 +156,9 @@ int SLRemove(SortedListPtr list, void *newObj)
     NodePointer nodeToRemove = list->head;
     
     // Case where head needs to be removed
-    if(nodeToRemove->data == newObj)
+    if (nodeToRemove->data == newObj)
     {
         list->head = list->head->next;
-        
-        if (list->head != NULL)
-        {
-            list->head->isHead = 1;
-        }
-
         nodeToRemove->numberOfPointers--;
 
         if (nodeToRemove->numberOfPointers == 0)
@@ -185,7 +173,7 @@ int SLRemove(SortedListPtr list, void *newObj)
     // Case where object to remove is in the middle or end
     while (nodeToRemove != NULL)
     {
-        if(nodeToRemove->data == newObj)
+        if (nodeToRemove->data == newObj)
         {
             prevNode->next = nodeToRemove->next;
             nodeToRemove->numberOfPointers--;
@@ -206,13 +194,13 @@ int SLRemove(SortedListPtr list, void *newObj)
 
 SortedListIteratorPtr SLCreateIterator(SortedListPtr list)
 {
-    if(list == NULL)
+    if (list == NULL)
     {
         printf("ERROR: The list given to SLCreateIterator was \'NULL\' (not allocated)\n");
         return NULL;
     }
 
-    if(list->head == NULL)
+    if (list->head == NULL)
     {
         printf("ERROR: The list given to SLCreateIterator was empty'\n");
         return NULL;
@@ -227,8 +215,7 @@ SortedListIteratorPtr SLCreateIterator(SortedListPtr list)
 
 void SLDestroyIterator(SortedListIteratorPtr iterator)
 {
-    //get rid of data in itertaor, then get rid of iterator, then decrease number of pointers,
-    if(iterator == NULL)
+    if (iterator == NULL)
     {
         printf("ERROR: The iterator given to SLDestroyIterator was \'NULL\'\n");
         return;
@@ -236,7 +223,7 @@ void SLDestroyIterator(SortedListIteratorPtr iterator)
 
     iterator->currentNode->numberOfPointers--;
 
-    if(iterator->currentNode->numberOfPointers == 0)
+    if (iterator->currentNode->numberOfPointers <= 0)
     {
         iterator->destroy(iterator->currentNode->data);
         free(iterator->currentNode);
@@ -247,12 +234,12 @@ void SLDestroyIterator(SortedListIteratorPtr iterator)
 
 void *SLGetItem(SortedListIteratorPtr iterator)
 {
-     if(iterator == NULL)
+    if (iterator == NULL)
     {
         printf("Iterator = Null \n");
         return NULL;
     }
-    else if(iterator->currentNode == NULL)
+    else if (iterator->currentNode == NULL)
     {
         printf("Iterator.currentNode = Null \n");
         return NULL;
@@ -262,7 +249,7 @@ void *SLGetItem(SortedListIteratorPtr iterator)
 
 void *SLNextItem(SortedListIteratorPtr iterator)
 {
-    if(iterator == NULL)
+    if (iterator == NULL)
     {
         printf("Iterator = Null \n");
         return NULL;
@@ -279,17 +266,47 @@ void *SLNextItem(SortedListIteratorPtr iterator)
     iterator->currentNode->numberOfPointers++;
 
     //If it was previously removed from the list
-    if(prevNode->numberOfPointers == 0 ) 
+    if (prevNode->numberOfPointers == 0 ) 
     {
         iterator->destroy(prevNode->data);
         free(prevNode);
     }
 
     //If it is the last item
-    if(iterator->currentNode == NULL) 
+    if (iterator->currentNode == NULL) 
     { 
         return NULL;
     }
 
     return iterator;
+}
+
+void printSortedList(SortedListPtr list, char *type)
+{
+	if (list == NULL)
+	{
+		printf("Dumbass you didn't even gimme a list\n");
+		return;
+	}
+	
+	if (list->head == NULL)
+	{
+		printf("Dumbass the list is empty");
+		return;
+	}
+
+	printf("Sorted List: {");
+	NodePointer nodeToPrint = list->head;
+    while (nodeToPrint != NULL)
+    {
+    	if (strcmp(type, "int") == 0)
+    		printf("%d", *(int*)nodeToPrint->data);
+    	if (strcmp(type, "double") == 0)
+    		;
+//    		printf("%lf", *(double*)nodeToPrint->data);
+    	if (nodeToPrint->next != NULL)
+    		printf(", ");
+        nodeToPrint = nodeToPrint->next;
+    }
+    printf("}\n");
 }

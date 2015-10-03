@@ -7,7 +7,6 @@
 #define SORTED_LIST_H
 
 #include <stdlib.h>
-//#include <stdbool.h>
 
 /*
  * When your sorted list is used to store objects of some type, since the
@@ -30,8 +29,6 @@ struct Node
 	struct Node *next;
 	void *data;
 	int numberOfPointers;
-    int isHead;
-//	bool exists;
 };
 typedef struct Node *NodePointer;
 
@@ -149,5 +146,7 @@ void *SLGetItem(SortedListIteratorPtr iter);
  * You need to fill in this function as part of your implementation.
  */
 void *SLNextItem(SortedListIteratorPtr iter);
+
+void printSortedList(SortedListPtr list, char *type);
 
 #endif
