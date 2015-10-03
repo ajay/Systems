@@ -27,8 +27,8 @@ int compareInts (void * p1, void * p2) {
 void destroy(void *data)
 {
 	int first = *(int *) data;
-	printf("%d\n", first);
-//	printf(" I DESTROYED THE DATA\n");
+	printf("%d", first);
+	printf(" I DESTROYED THAT SHIEEEET\n");
 	return;
 }
 

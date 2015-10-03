@@ -238,7 +238,7 @@ void SLDestroyIterator(SortedListIteratorPtr iterator)
 
     if(iterator->currentNode->numberOfPointers == 0)
     {
-        // list->destroy(iterator->currentNode->data);
+        iterator->destroy(iterator->currentNode->data);
         free(iterator->currentNode);
     }
 
@@ -247,20 +247,49 @@ void SLDestroyIterator(SortedListIteratorPtr iterator)
 
 void *SLGetItem(SortedListIteratorPtr iterator)
 {
-    if(iterator == NULL)
+     if(iterator == NULL)
     {
+        printf("Iterator = Null \n");
         return NULL;
     }
     else if(iterator->currentNode == NULL)
     {
-        printf("Stop trying stupid stuff, dumbass. Don't you have other stuff to do in life. \n");
+        printf("Iterator.currentNode = Null \n");
         return NULL;
     }
     return iterator->currentNode->data;
-    return NULL;
 }
 
-void *SLNextItem(SortedListIteratorPtr iter)
+void *SLNextItem(SortedListIteratorPtr iterator)
 {
-    return NULL;
+    if(iterator == NULL)
+    {
+        printf("Iterator = Null \n");
+        return NULL;
+    }
+    else if(iterator->currentNode == NULL)
+    {
+        printf("Iterator.currentNode = Null \n");
+        return NULL;
+    }
+
+    iterator->currentNode->numberOfPointers--;
+    NodePointer prevNode = iterator->currentNode;
+    iterator->currentNode = iterator->currentNode->next;
+    iterator->currentNode->numberOfPointers++;
+
+    //If it was previously removed from the list
+    if(prevNode->numberOfPointers == 0 ) 
+    {
+        iterator->destroy(prevNode->data);
+        free(prevNode);
+    }
+
+    //If it is the last item
+    if(iterator->currentNode == NULL) 
+    { 
+        return NULL;
+    }
+
+    return iterator;
 }
