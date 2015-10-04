@@ -1,0 +1,86 @@
+/*
+ * Ajay Srivastava (as1877) & Srihari Chekuri (svc31)
+ * testplan.txt for sortedlist.c
+ */
+
+Test Case 1: Create a list passing in NULL compare or destroy functions
+Input: 
+
+Expected Result:
+
+
+Test Case 2: Inserting an object into the list that is already present 
+Input:
+
+Expected Result:
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------
+
+
+
+
+Test Case 3:
+SLNextItem is called after inserting an object when the iterator should return null.
+Input: Array char [“Tom”, “Jerry”];   
+	SLInsert(sl2, " kobe”);
+
+Expected Result: SLNextItem returns Tom, then Jerry, then kobe, and finally null.
+
+
+
+
+Test Case 4:
+
+From the same list, multiple iterators will be instantiated and start removing objects. SLNextItem shouldn't be able to return a removed object. 
+
+Input: Array char: [“zoom”, “lebron”, “Sachery”, “Russell”, “Jack”, “ kobe”]
+	after iterators 1 and 2 are instantiated, they each point to kobe and Sachery respectively. Then, 
+	kobe and Sachery will be removed. SLNextItem is called twice. 
+
+Expected Result: iterator returns Russell	
+		    iterator2 returns Russell
+	
+
+
+
+Test Case 5:
+
+Attempt to remove an object from the list that is already removed
+
+Input: list: [1,2,3,4]
+	SLRemove(list, 4)
+	SLRemove(list, 4)
+
+Expected Result: After the successful removal of 4 from the list via the initial SLRemove, the second function call returns 0 and prints “Object not found”. 
+
+
+
+
+Test Case 6:
+
+Test the SLGetItem function by observing its return value.
+
+Input: char array [“aa”, “bb”, “cc”]
+	iterator 3 is initialized.
+
+Expected Result: Because no SLNextItem calls were made, the pointer is still at the front, “cc”, and thus returns “cc”. 
+
+
+
+
+Test Case 7:
+
+Testing SLInsert and SLRemove by having double type numbers as input.
+
+Input: List: [456.934, 432.767, 58.9650]
+		instantiate iterator, call SLNextItem, then call SLRemove.
+
+Expected Result: SLNextItem returns 58.965. 
