@@ -36,7 +36,7 @@ int compareDoubles (void *pOne, void *pTwo)
  */
 void destroy(void *data)
 {
-	printf("KILL: %d\n, ", *(int*)data);
+	// printf("KILL: %d\n, ", *(int*)data);
 	return;
 }
 
@@ -58,21 +58,18 @@ int main(int argc, char **argv)
 	{
 		if(SLInsert(test1, &intArray[i]) == 0)
 		{
-			printf("\e[1;31mThere was an error inserting ints\n\e[0m");
+			printf("\e[1;31mAYYYYY LMAO there was an error inserting ints\n\e[0m");
 		}
 	}
 	printSortedList(test1, "int");
 	// SLRemove(test1, &intArray[1]);
-	// SLDestroy(test1);
-	// return 0;
-
+	SLDestroy(test1);
 
 	// WHAT THE FUCK ARE DOUBLES
-	/* 
-
+	 
 	printf("\n\e[1;32mTest Case 2: \n\e[0m");
     SortedListPtr test2 = SLCreate(compareDoubles, destroy);
-	int doubleArray[10] = {9.2, 32.41, 48.2, 6.1, 1.4, 1.4, .4, 1.1, 1.2, -43.14};
+	double doubleArray[10] = {9.2, 32.41, 48.2, 6.1, 1.4, 1.5, .4, 1.1, 1.2, -43.14};
 
 	for(i=0; i<10; i++)
 	{
@@ -81,8 +78,7 @@ int main(int argc, char **argv)
 			printf("\e[1;31mThere was an error inserting doubles\n\e[0m");
 		}
 	}
-	SLDestroy(test2);
-//	printSortedList(test2, "double");
-	*/
+//	SLDestroy(test2);
+	printSortedList(test2, "double");
 	return 0;
 }

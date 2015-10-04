@@ -196,13 +196,13 @@ SortedListIteratorPtr SLCreateIterator(SortedListPtr list)
 {
     if (list == NULL)
     {
-        printf("ERROR: The list given to SLCreateIterator was \'NULL\' (not allocated)\n");
+        printf("\e[1;31mERROR: The list given to SLCreateIterator was \'NULL\' (not allocated) ??????? nigggaaa\n\e[0m");
         return NULL;
     }
 
     if (list->head == NULL)
     {
-        printf("ERROR: The list given to SLCreateIterator was empty'\n");
+        printf("\e[1;31mERROR: The list given to SLCreateIterator was empty (why u do)'\n\e[0m");
         return NULL;
     }
 
@@ -217,7 +217,7 @@ void SLDestroyIterator(SortedListIteratorPtr iterator)
 {
     if (iterator == NULL)
     {
-        printf("ERROR: The iterator given to SLDestroyIterator was \'NULL\'\n");
+        printf("\e[1;31mERROR: The iterator given to SLDestroyIterator was \'NULL\' (lololololol) \n\e[0m");
         return;
     }
 
@@ -236,12 +236,12 @@ void *SLGetItem(SortedListIteratorPtr iterator)
 {
     if (iterator == NULL)
     {
-        printf("Iterator = Null \n");
+        printf("\e[1;31mERROR: The iterator given to SLGetItem was \'NULL\' (wtfbbqlol) \n\e[0m");
         return NULL;
     }
     else if (iterator->currentNode == NULL)
     {
-        printf("Iterator.currentNode = Null \n");
+        printf("\e[1;31mERROR: The node iterator points to in SLGetItem was \'NULL\' (HAHAHAHAHAHA) \n\e[0m");
         return NULL;
     }
     return iterator->currentNode->data;
@@ -251,12 +251,12 @@ void *SLNextItem(SortedListIteratorPtr iterator)
 {
     if (iterator == NULL)
     {
-        printf("Iterator = Null \n");
+        printf("\e[1;31mERROR: The iterator given to SLNextItem was \'NULL\' (wtfbbqlol) \n\e[0m");
         return NULL;
     }
     else if(iterator->currentNode == NULL)
     {
-        printf("Iterator.currentNode = Null \n");
+        printf("\e[1;31mERROR: The node iterator points to in SLNextItem was \'NULL\' (HAHAHAHAHAHA) \n\e[0m");
         return NULL;
     }
 
@@ -285,13 +285,13 @@ void printSortedList(SortedListPtr list, char *type)
 {
 	if (list == NULL)
 	{
-		printf("Dumbass you didn't even gimme a list\n");
+		printf("\e[1;31mERROR: Dumbass you didn't even gimme a list\n\e[0m");
 		return;
 	}
 	
 	if (list->head == NULL)
 	{
-		printf("Dumbass the list is empty");
+		printf("\e[1;31mERROR: Dumbass the list is empty\e[0m");
 		return;
 	}
 
@@ -302,8 +302,7 @@ void printSortedList(SortedListPtr list, char *type)
     	if (strcmp(type, "int") == 0)
     		printf("%d", *(int*)nodeToPrint->data);
     	if (strcmp(type, "double") == 0)
-    		;
-//    		printf("%lf", *(double*)nodeToPrint->data);
+    		printf("%lf", *(double*)nodeToPrint->data);
     	if (nodeToPrint->next != NULL)
     		printf(", ");
         nodeToPrint = nodeToPrint->next;
