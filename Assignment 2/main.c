@@ -13,22 +13,25 @@
  * =0 if the Two Objects are equal		(if Obj 1 == Obj 2)
  * >0 if the Second Object is Smaller 	(if Obj 1 > Obj 2)
  */
-int compareInts (void *pOne, void *pTwo)
+int compareInts(void *pOne, void *pTwo)
 {
     int one = *(int*) pOne;
     int two = *(int*) pTwo;
     return (one - two);
 }
 
-int compareDoubles (void *pOne, void *pTwo)
+int compareDoubles(void *pOne, void *pTwo)
 {
     double one = *(double*) pOne;
     double two = *(double*) pTwo;
-	if (one == two)
-        return 0;
-    if (one < two)
-        return -1;
-    return 1;
+	return (one - two);
+}
+
+int compareStrings(void *pOne, void *pTwo)
+{
+	char *one = *(char*) pOne;
+	char *two = *(char*) pTwo;
+    return strcmp(one, two);
 }
 
 /*
@@ -58,15 +61,15 @@ int main(int argc, char **argv)
 	{
 		if(SLInsert(test1, &intArray[i]) == 0)
 		{
-			printf("\e[1;31mAYYYYY LMAO there was an error inserting ints\n\e[0m");
+			printf("\e[1;34mThere was an error received from SLInsert\n\e[0m");
 		}
 	}
 	printSortedList(test1, "int");
 	// SLRemove(test1, &intArray[1]);
 	SLDestroy(test1);
 
-	// WHAT THE FUCK ARE DOUBLES
-	 
+
+    // Test Case 2 (Doubles)	 
 	printf("\n\e[1;32mTest Case 2: \n\e[0m");
     SortedListPtr test2 = SLCreate(compareDoubles, destroy);
 	double doubleArray[10] = {9.2, 32.41, 48.2, 6.1, 1.4, 1.5, .4, 1.1, 1.2, -43.14};
@@ -75,10 +78,14 @@ int main(int argc, char **argv)
 	{
 		if(SLInsert(test2, &doubleArray[i]) == 0)
 		{
-			printf("\e[1;31mThere was an error inserting doubles\n\e[0m");
+			printf("\e[1;34mThere was an error received from SLInsert\n\e[0m");
 		}
 	}
-//	SLDestroy(test2);
+	SLDestroy(test2);
 	printSortedList(test2, "double");
+
+
+
+
 	return 0;
 }

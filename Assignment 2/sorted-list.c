@@ -13,18 +13,18 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df)
     {
         if (df == NULL)
         {
-            printf("\e[1;31mERROR: The comparator and destructor functions are missing (what you doin?)\n\e[0m");
+            printf("\e[1;31mERROR: The comparator and destructor functions are missing\n\e[0m");
         }
         else
         {
-            printf("\e[1;31mERROR: The comparator function is missing (lol srsly?)\n\e[0m");
+            printf("\e[1;31mERROR: The comparator function is missing\n\e[0m");
         }
         return NULL;
     }
     
     if (df == NULL)
     {
-        printf("\e[1;31mERROR: The destructor function is missing (really? u srs?)\n\e[0m");
+        printf("\e[1;31mERROR: The destructor function is missing\n\e[0m");
         return NULL;
     }
     
@@ -32,7 +32,7 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df)
     
     if (list == NULL)
     {
-        printf("\e[1;31mERROR: There was no memory to be allocated for the new sorted list (sum real shit went wrong)\n\e[0m");
+        printf("\e[1;31mERROR: There was no memory to be allocated for the new sorted list\n\e[0m");
         return NULL;
     }
     
@@ -63,13 +63,13 @@ int SLInsert(SortedListPtr list, void *newObj)
 {
     if (list == NULL)
     {
-        printf("\e[1;31mERROR: The list given to SLInsert was \'NULL\' (where my list at)\n\e[0m");
+        printf("\e[1;31mERROR: The list given to SLInsert was \'NULL\'\n\e[0m");
         return 0;
     }
 
     if (newObj == NULL)
     {
-        printf("\e[1;31mERROR: The object given to SLInsert was \'NULL\' (U GAaY whatchu doin)\e[0m");
+        printf("\e[1;31mERROR: The object given to SLInsert was \'NULL\'\e[0m");
         return 0;
     }
     
@@ -94,7 +94,7 @@ int SLInsert(SortedListPtr list, void *newObj)
         {
             list->destroy(nodeToInsert->data);
             free(nodeToInsert);
-            printf("\e[1;31mERROR: The data to insert was already present in the list (gg no re)\n\e[0m");
+            printf("\e[1;31mERROR: The data to insert was already present in the list\n\e[0m");
             return 0;
         }
 
@@ -133,7 +133,7 @@ int SLInsert(SortedListPtr list, void *newObj)
         return 1;
     }
 
-    printf("\e[1;31mERROR: There was an unknown error in SLInsert (SHIIIEEEETTT U rlly fucked up lel)\n\e[0m");
+    printf("\e[1;31mERROR: There was an unknown error in SLInsert\n\e[0m");
     return 0;
 }
 
@@ -142,13 +142,13 @@ int SLRemove(SortedListPtr list, void *newObj)
 {
     if (list == NULL)
     {
-        printf("\e[1;31mERROR: There was no list given (why u playin doe)\n\e[0m");
+        printf("\e[1;31mERROR: There was no list given\n\e[0m");
         return 0;
     }
 
     if (newObj == NULL)
     {
-        printf("\e[1;31mERROR: There was no data given (why u tease me?)\n\e[0m");
+        printf("\e[1;31mERROR: There was no data given\n\e[0m");
         return 0;
     }
     
@@ -188,7 +188,7 @@ int SLRemove(SortedListPtr list, void *newObj)
         nodeToRemove = nodeToRemove->next;
     }
 
-    printf("\e[1;31mERROR: Object to remove not found in list (lol u tryna trick me)\n\e[0m");
+    printf("\e[1;31mERROR: Object to remove not found in list\n\e[0m");
     return 0;
 }
 
@@ -196,13 +196,13 @@ SortedListIteratorPtr SLCreateIterator(SortedListPtr list)
 {
     if (list == NULL)
     {
-        printf("\e[1;31mERROR: The list given to SLCreateIterator was \'NULL\' (not allocated) ??????? nigggaaa\n\e[0m");
+        printf("\e[1;31mERROR: The list given to SLCreateIterator was \'NULL\'\n\e[0m");
         return NULL;
     }
 
     if (list->head == NULL)
     {
-        printf("\e[1;31mERROR: The list given to SLCreateIterator was empty (why u do)'\n\e[0m");
+        printf("\e[1;31mERROR: The list given to SLCreateIterator was empty\n\e[0m");
         return NULL;
     }
 
@@ -217,7 +217,7 @@ void SLDestroyIterator(SortedListIteratorPtr iterator)
 {
     if (iterator == NULL)
     {
-        printf("\e[1;31mERROR: The iterator given to SLDestroyIterator was \'NULL\' (lololololol) \n\e[0m");
+        printf("\e[1;31mERROR: The iterator given to SLDestroyIterator was \'NULL\'\n\e[0m");
         return;
     }
 
@@ -236,12 +236,12 @@ void *SLGetItem(SortedListIteratorPtr iterator)
 {
     if (iterator == NULL)
     {
-        printf("\e[1;31mERROR: The iterator given to SLGetItem was \'NULL\' (wtfbbqlol) \n\e[0m");
+        printf("\e[1;31mERROR: The iterator given to SLGetItem was \'NULL\'\n\e[0m");
         return NULL;
     }
     else if (iterator->currentNode == NULL)
     {
-        printf("\e[1;31mERROR: The node iterator points to in SLGetItem was \'NULL\' (HAHAHAHAHAHA) \n\e[0m");
+        printf("\e[1;31mERROR: The node iterator points to in SLGetItem was \'NULL\'\n\e[0m");
         return NULL;
     }
     return iterator->currentNode->data;
@@ -251,12 +251,12 @@ void *SLNextItem(SortedListIteratorPtr iterator)
 {
     if (iterator == NULL)
     {
-        printf("\e[1;31mERROR: The iterator given to SLNextItem was \'NULL\' (wtfbbqlol) \n\e[0m");
+        printf("\e[1;31mERROR: The iterator given to SLNextItem was \'NULL\'\n\e[0m");
         return NULL;
     }
     else if(iterator->currentNode == NULL)
     {
-        printf("\e[1;31mERROR: The node iterator points to in SLNextItem was \'NULL\' (HAHAHAHAHAHA) \n\e[0m");
+        printf("\e[1;31mERROR: The node iterator points to in SLNextItem was \'NULL\'\n\e[0m");
         return NULL;
     }
 
@@ -285,13 +285,13 @@ void printSortedList(SortedListPtr list, char *type)
 {
 	if (list == NULL)
 	{
-		printf("\e[1;31mERROR: Dumbass you didn't even gimme a list\n\e[0m");
+		printf("\e[1;31mERROR: No list was given to printSortedList\n\e[0m");
 		return;
 	}
 	
 	if (list->head == NULL)
 	{
-		printf("\e[1;31mERROR: Dumbass the list is empty\e[0m");
+		printf("\e[1;31mERROR: The list given to printSortedList is empty\e[0m");
 		return;
 	}
 
