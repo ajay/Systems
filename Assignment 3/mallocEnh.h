@@ -13,7 +13,7 @@ struct MemEntry
 {
 	unsigned int size;
 	unsigned int isFree;
-	struct MemEntry *succ;
+	struct MemEntry *next;
 	struct MemEntry *prev;
 };
 

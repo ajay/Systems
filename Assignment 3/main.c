@@ -9,9 +9,9 @@
 
 int main(int argc, char **argv)
 {
-//	void *p = NULL;
-//	p = malloc(1000);
-//	p = 10765;
-//	printf("This is p: %d\n", p);
+	void *p = NULL;
+	p = malloc(1000);
+	p = 10765;
+	printf("This is p: %d\n", p);
 	return 0;
 }

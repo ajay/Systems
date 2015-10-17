@@ -8,20 +8,19 @@
 #include "mallocEnh.h"
 
 #define MEMSIZE 5000
-
 static char Memory[MEMSIZE];
 
-void *myMalloc(unsigned int size, char* file, int l)
+void *myMalloc(unsigned int size, char * file, int l)
 {
     static int initialized = 0;
     static struct MemEntry *root;
     struct MemEntry *p;
-    struct MemEntry *succ;
+    struct MemEntry *next;
 
     if (!initialized)
     {
         root = (struct MemEntry *)Memory;
-        root->prev = root->succ = 0;
+        root->prev = root->next = 0;
         root->size = MEMSIZE - sizeof(struct MemEntry);
         root->isFree = 1;
         initialized = 1;
@@ -33,11 +32,11 @@ void *myMalloc(unsigned int size, char* file, int l)
     {
         if (p->size < size)
         {
-            p = p->succ;            // too small
+            p = p->next;            // too small
         }
         else if (!p->isFree)
         {
-            p = p->succ;            // in use
+            p = p->next;            // in use
         }
         else if (p->size < (size + sizeof(struct MemEntry)))
         {
@@ -46,13 +45,13 @@ void *myMalloc(unsigned int size, char* file, int l)
         }
         else
         {
-            succ = (struct MemEntry*) ((char *)p + sizeof(struct MemEntry) + size);
-            succ->succ = p->succ;
-            if(p->succ !=0)
-                p->succ->prev = succ;
-            p->succ = succ;
-            succ->size = p->size - sizeof(struct MemEntry) - size;
-            succ->isFree = 1;
+            next = (struct MemEntry*) ((char *)p + sizeof(struct MemEntry) + size);
+            next->next = p->next;
+            if(p->next !=0)
+                p->next->prev = next;
+            p->next = next;
+            next->size = p->size - sizeof(struct MemEntry) - size;
+            next->isFree = 1;
             p->size = size;
             p->isFree = 0;
             return (char *)p + sizeof(struct MemEntry);
@@ -65,25 +64,25 @@ void myFree(void *p, char* file, int l)
 {
     struct MemEntry *ptr;
     struct MemEntry *pred;
-    struct MemEntry *succ;
+    struct MemEntry *next;
     ptr = (struct MemEntry*) ((char *)p - sizeof(struct MemEntry));
     if ((pred = ptr->prev ) !=0 && pred->isFree)
     {
         pred->size += sizeof(struct MemEntry) + ptr->size; //merge with predecessor
-        pred->succ = ptr->succ;
-        if (ptr->succ != 0)
-            ptr->succ->prev = pred;
+        pred->next = ptr->next;
+        if (ptr->next != 0)
+            ptr->next->prev = pred;
     }
     else
     {
         ptr->isFree = 1;
         pred = ptr;
     }
-    if ((succ = ptr->succ) !=0 && succ->isFree)
+    if ((next = ptr->next) !=0 && next->isFree)
     {
-        pred->size += sizeof(struct MemEntry) + succ->size;     // merge with succ
-        pred->succ = succ->succ;
-        if (succ->succ !=0)
-            succ->succ->prev = pred;
+        pred->size += sizeof(struct MemEntry) + next->size;     // merge with next
+        pred->next = next->next;
+        if (next->next !=0)
+            next->next->prev = pred;
     }
 }
