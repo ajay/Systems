@@ -10,6 +10,21 @@
 #define MEMSIZE 5000
 static char Memory[MEMSIZE];
 
+static struct MemEntry * root = 0;
+static struct MemEntry * last = 0;
+void *arr[5000];
+static int i = 0;
+
+void remove_from_arr(struct MemEntry *p){
+int j;
+for(j=0;j<i;j++){
+if(p == arr[j]){
+arr[j]= NULL;
+return;
+}
+}
+}
+
 void *myMalloc(unsigned int size, char * file, int l)
 {
 static int initialized = 0;
@@ -34,13 +49,13 @@ static int initialized = 0;
         {
             p = p->succ;                 // too small
         }
-        else if ( !p->isfree )
+        else if ( !p->isFree )
         {
             p = p->succ;                 // in use
         }
         else if ( p->size < (size + sizeof(struct MemEntry)) )
         {
-            p->isfree = 0;                   // too small to chop up
+            p->isFree = 0;                   // too small to chop up
             remove_from_arr(p);
             return (char *)p + sizeof(struct MemEntry);
         }
@@ -55,9 +70,9 @@ static int initialized = 0;
             }
             p->succ = succ;
             succ->size = p->size - sizeof(struct MemEntry) - size;
-            succ->isfree = 1;
+            succ->isFree = 1;
             p->size = size;
-            p->isfree = 0;
+            p->isFree = 0;
             last = (p == last) ? succ : last;
             remove_from_arr(p);
             return (char *)p + sizeof(struct MemEntry);
@@ -74,7 +89,7 @@ static int initialized = 0;
         p->prev = 0;
         p->succ = 0;
         p->size = size;
-        p->isfree = 0;
+        p->isFree = 0;
         root = last = p;
         return (char *)p + sizeof(struct MemEntry);
     }
@@ -84,7 +99,7 @@ static int initialized = 0;
         p->prev = last;
         p->succ = last->succ;
         p->size = size;
-        p->isfree = 0;
+        p->isFree = 0;
         last->succ = p;
         last = p;
         return (char *)p + sizeof(struct MemEntry);
@@ -133,13 +148,13 @@ void myFree(void *p, char* file, int l)
      
      
      
-    if ( (pred = ptr->prev) != 0 && pred->isfree )
+    if ( (pred = ptr->prev) != 0 && pred->isFree )
     {
         pred->size += sizeof(struct MemEntry) + ptr->size;    // merge with predecessor
          
         pred->succ = ptr->succ;
         //begin added
-        ptr->isfree=1;
+        ptr->isFree=1;
         pred->succ = ptr->succ;
         if(ptr->succ != 0)
             ptr->succ->prev = pred;
@@ -150,15 +165,15 @@ void myFree(void *p, char* file, int l)
     {
         printf( "BKR freeing block %#x.\n", p );
         arr[i++] = ptr;
-        ptr->isfree = 1;
+        ptr->isFree = 1;
         pred = ptr;
     }
-    if ( (succ = ptr->succ) != 0 && succ->isfree )
+    if ( (succ = ptr->succ) != 0 && succ->isFree )
     {
         pred->size += sizeof(struct MemEntry) + succ->size;   // merge with successor
         pred->succ = succ->succ;
         //begin added
-        pred->isfree = 1;
+        pred->isFree = 1;
          
         if(succ->succ != 0)
             succ->succ->prev=pred;
@@ -167,24 +182,3 @@ void myFree(void *p, char* file, int l)
         printf( "BKR freeing block %#x merging with successor new size is %d.\n", p, pred->size );
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
