@@ -8,26 +8,29 @@
 #include "mallocEnh.h"
 
 #define MEMSIZE 5000
-static char Memory[MEMSIZE];
+static void* Memory[MEMSIZE];
 
 static struct MemEntry * root = 0;
 static struct MemEntry * last = 0;
-void *arr[5000];
+// void *arr[5000];
 static int i = 0;
 
-void remove_from_arr(struct MemEntry *p){
-int j;
-for(j=0;j<i;j++){
-if(p == arr[j]){
-arr[j]= NULL;
-return;
-}
-}
+void removeFromMemory(struct MemEntry *p)
+{
+	int j;
+	for(j=0;j<i;j++)
+	{
+		if(p == Memory[j])
+		{
+			Memory[j]= NULL;
+			return;
+		}
+	}
 }
 
 void *myMalloc(unsigned int size, char * file, int l)
 {
-static int initialized = 0;
+	static int initialized = 0;
     static struct MemEntry *root;
     struct MemEntry *p;
     struct MemEntry *succ;
@@ -47,16 +50,16 @@ static int initialized = 0;
     {
         if ( p->size < size )
         {
-            p = p->succ;                 // too small
+            p = p->succ;                 							// too small
         }
         else if ( !p->isFree )
         {
-            p = p->succ;                 // in use
+            p = p->succ;                 							// in use
         }
         else if ( p->size < (size + sizeof(struct MemEntry)) )
         {
-            p->isFree = 0;                   // too small to chop up
-            remove_from_arr(p);
+            p->isFree = 0;                   						// too small to chop up
+            removeFromMemory(p);
             return (char *)p + sizeof(struct MemEntry);
         }
         else
@@ -74,7 +77,7 @@ static int initialized = 0;
             p->size = size;
             p->isFree = 0;
             last = (p == last) ? succ : last;
-            remove_from_arr(p);
+            removeFromMemory(p);
             return (char *)p + sizeof(struct MemEntry);
         }
     } while (p != 0);
@@ -83,7 +86,7 @@ static int initialized = 0;
     {
         return 0;
     }
-    else if ( last == 0 )               // first block created
+    else if ( last == 0 )               							// first block created
     {
         printf( "BKR making first chunk size %d\n", size );
         p->prev = 0;
@@ -93,7 +96,7 @@ static int initialized = 0;
         root = last = p;
         return (char *)p + sizeof(struct MemEntry);
     }
-    else                        // other blocks appended
+    else                        									// other blocks appended
     {
         printf( "BKR making another chunk size %d\n", size );
         p->prev = last;
@@ -107,11 +110,6 @@ static int initialized = 0;
 
     return 0;
 }
-
-
-
-
-
 
 void myFree(void *p, char* file, int l)
 {
@@ -137,17 +135,14 @@ void myFree(void *p, char* file, int l)
      
     int j;
     for (j = 0; j < i; j++) {
-        if (ptr == arr[j]) {
+        if (ptr == Memory[j]) {
             printf("<ERROR>: Has already been freed\n");
             return;
         }
     }
-     
+
     root = temp;
-     
-     
-     
-     
+
     if ( (pred = ptr->prev) != 0 && pred->isFree )
     {
         pred->size += sizeof(struct MemEntry) + ptr->size;    // merge with predecessor
@@ -159,12 +154,12 @@ void myFree(void *p, char* file, int l)
         if(ptr->succ != 0)
             ptr->succ->prev = pred;
         //end added
-        printf( "BKR freeing block %#x merging with predecessor new size is %d.\n", p, pred->size );
+ //       printf( "BKR freeing block %#x merging with predecessor new size is %d.\n", p, pred->size );
     }
     else
     {
-        printf( "BKR freeing block %#x.\n", p );
-        arr[i++] = ptr;
+//        printf( "BKR freeing block %#x.\n", p );
+        Memory[i++] = ptr;
         ptr->isFree = 1;
         pred = ptr;
     }
@@ -178,7 +173,7 @@ void myFree(void *p, char* file, int l)
         if(succ->succ != 0)
             succ->succ->prev=pred;
         //end added
-        arr[i++] = ptr;
-        printf( "BKR freeing block %#x merging with successor new size is %d.\n", p, pred->size );
+        Memory[i++] = ptr;
+ //       printf( "BKR freeing block %#x merging with successor new size is %d.\n", p, pred->size );
     }
 }
