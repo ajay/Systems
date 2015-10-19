@@ -13,10 +13,11 @@ struct MemEntry
 {
 	unsigned int size;
 	unsigned int isFree;
-	struct MemEntry *succ;
+	struct MemEntry *next;
 	struct MemEntry *prev;
 };
 
+typedef struct MemEntry MemEntry;
 
 void *myMalloc(unsigned int size, char* file, int l);
 void myFree(void *Pointer, char* file, int l);
