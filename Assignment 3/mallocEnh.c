@@ -15,7 +15,6 @@
 
 static MemEntry * root = 0;
 static MemEntry * last = 0;
-static int index = 0;
 static int TOTALMEMORY = 0;
 
 void leak()
@@ -48,14 +47,10 @@ void* myMalloc(unsigned int bytes, char *file, int line)
 
 	while (current != 0)
 	{
-		if (current->size < bytes)
+		if ((current->size < bytes) || current->isFree == false)
 		{
 			current = current->next;
 		}
-	    else if (!current->isFree)
-	    {
-	    	current = current->next;
-	    }
 	    else if (block->size < current->size) 
 	    {
 			block = current;

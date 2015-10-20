@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g
+CFLAGS = -g -Wall
 COMPILE = $(CC) $(CFLAGS)
 TARGET = main.c
 
