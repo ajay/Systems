@@ -9,12 +9,17 @@
 #define malloc(x) myMalloc(x, __FILE__, __LINE__)
 #define free(x) myFree(x, __FILE__, __LINE__)
 
+#include <stdbool.h>
+
 struct MemEntry
 {
-	unsigned int size;
-	unsigned int isFree;
 	struct MemEntry *next;
 	struct MemEntry *prev;
+	unsigned int size;
+	bool isFree;
+	bool isMemEntry;
+	char *file;
+	unsigned int line; 
 };
 
 typedef struct MemEntry MemEntry;
