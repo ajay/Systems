@@ -3,6 +3,10 @@
  * simpleTokenizer.c for pa4:Indexer
  */
 
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "simpleTokenizer.h"
 
 #define reset   "\x1b[0m"

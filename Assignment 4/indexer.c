@@ -3,10 +3,11 @@
  * indexer.c for pa4:Indexer
  */
 
+#include <dirent.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <dirent.h>
+#include <string.h>
 #include <sys/stat.h>
 #include "simpleTokenizer.h"
 
