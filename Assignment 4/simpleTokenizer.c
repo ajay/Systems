@@ -74,6 +74,9 @@ char *TKGetNextToken(Tokenizer *tokenizer)
 			strncpy(tokenizer->token, tokenizer->start, length);
 			tokenizer->token[length] = '\0';
 
+			for(int i = 0; tokenizer->token[i]; i++)
+				tokenizer->token[i] = tolower(tokenizer->token[i]);
+
 			tokenizer->start = tokenizer->current;
 			tokenizer->oldToken = tokenizer->token;
 
