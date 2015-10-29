@@ -1,0 +1,1 @@
+Hello hi %bye $yay no test@ c c++ hello. die
