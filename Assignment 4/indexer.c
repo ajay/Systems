@@ -10,10 +10,12 @@
 #include <string.h>
 #include <sys/stat.h>
 #include "simpleTokenizer.h"
+#include "trieTree.h"
 
 #define reset	"\x1b[0m"
 #define	red		"\x1b[31m"
 #define green	"\x1b[32m"
+
 
 bool isADirectory(char *inputDir)
 {
@@ -141,6 +143,10 @@ int main(int argc, char **argv)
 
 	char *input = "testDir";
 	recurseDir(input);
+
+	trieNodePointer root = createNewTrieNode();
+
+	printf("%p", (void*)root);
 
 	return 0;
 }

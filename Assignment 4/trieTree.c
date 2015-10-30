@@ -7,6 +7,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "trieTree.h"
+
+#define ALPHABET_SIZE 36
 
 struct fileList
 {
@@ -18,7 +21,7 @@ typedef struct fileList *fileListNode;
 
 struct trieNode
 {
-	struct trieNodePointer children[36];
+	struct trieNode *children[ALPHABET_SIZE];
 	fileListNode files;
 };
 typedef struct trieNode *trieNodePointer;
@@ -45,15 +48,9 @@ trieNodePointer createNewTrieNode()
 {
     trieNodePointer t = (trieNodePointer) malloc(sizeof(struct trieNode));
 
-	for (int i = 0; i < t->children[i]; i++)
+	for (int i = 0; i < ALPHABET_SIZE; i++)
 		t->children[i] = NULL;
 	t->files = NULL;
 
 	return t;
-}
-
-
-int main()
-{
-	return 0;
 }

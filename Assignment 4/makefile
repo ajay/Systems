@@ -8,10 +8,13 @@ all: $(PROGRAM)
 simpleTokenizer.o: simpleTokenizer.c simpleTokenizer.h
 	$(COMPILE) -c $<
 
+trieTree.o: trieTree.c trieTree.h
+	$(COMPILE) -c $<
+
 indexer.o: indexer.c indexer.h
 	$(COMPILE) -c $<
 
-$(PROGRAM): simpleTokenizer.o indexer.o
+$(PROGRAM): simpleTokenizer.o trieTree.o indexer.o
 	$(COMPILE) -o $@ $^
 
 clean:
