@@ -6,18 +6,38 @@
 #ifndef TRIETREE_H
 #define TRIETREE_H
 
-struct fileList;
+#include <stdbool.h>
+#define ALPHABET_SIZE 36
 
-typedef struct fileList *fileListNode;
+struct fileList
+{
+	struct fileList *next;
+	char *fileName;
+	int count;
+};
+typedef struct fileList *fileNodePointer;
 
-struct trieNode;
-
+struct trieNode
+{
+	struct trieNode *children[ALPHABET_SIZE];
+	fileNodePointer files;
+	bool visited;
+	char *token;
+};
 typedef struct trieNode *trieNodePointer;
 
-int parseChar(int c);
+void assignRoot(trieNodePointer root);
 
-fileListNode createNextFileNode(char *fileName);
+fileNodePointer createNewFileNode(char *fileName);
 
 trieNodePointer createNewTrieNode();
+
+void resetVisited(trieNodePointer root);
+
+void trieInsert(trieNodePointer root, char *token, char *inputFilePath);
+
+void printTree(trieNodePointer root);
+
+void destroy();
 
 #endif

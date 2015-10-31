@@ -16,6 +16,7 @@
 #define	red		"\x1b[31m"
 #define green	"\x1b[32m"
 
+static trieNodePointer root = NULL;
 
 bool isADirectory(char *inputDir)
 {
@@ -76,7 +77,10 @@ int indexTokens(char *inputFilePath)
 		if (token != NULL)
 		{
 			// add to data structure here
-			printf("File: %s \t\tToken: %s\n", inputFilePath, token);
+			// printf("File: %s \t\tToken: %s\n", inputFilePath, token);
+
+			trieInsert(root, token, inputFilePath);
+
 		}
 	}
 
@@ -141,12 +145,21 @@ int main(int argc, char **argv)
 	// char *output = argv[1];
 	// char *input = argv[2];
 
-	char *input = "testDir";
+	char *input = "testDir/example";
+
+	root = createNewTrieNode();
+
+	assignRoot(root);
+
 	recurseDir(input);
 
-	trieNodePointer root = createNewTrieNode();
+	printf("\n");
 
-	printf("%p", (void*)root);
+	printTree(root);
+
+	destroy();
+
+	// printf("%p", (void*)root);
 
 	return 0;
 }

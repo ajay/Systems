@@ -9,48 +9,221 @@
 #include <string.h>
 #include "trieTree.h"
 
-#define ALPHABET_SIZE 36
+#define reset	"\x1b[0m"
+#define	red		"\x1b[31m"
+#define green	"\x1b[32m"
 
-struct fileList
+trieNodePointer ROOT = NULL;
+
+void assignRoot(trieNodePointer root)
 {
-	struct fileList *next;
-	char *fileName;
-	int count;
-};
-typedef struct fileList *fileListNode;
+	ROOT = root;
+}
 
-struct trieNode
-{
-	struct trieNode *children[ALPHABET_SIZE];
-	fileListNode files;
-};
-typedef struct trieNode *trieNodePointer;
-
-int parseChar(int c)
+int parseChar(char c)
 {
 	if (isalpha(c))
 		return (int)(c - 97);
-	else if ((c >= 0) && (c <= 9))
-		return (int)(c + 26);
+	else if (((int)c >= 48) && ((int)c <= 57))
+		return (int)(c - 22);
+	printf(red "ERROR: Can not parse character: " green "%c\n" reset, (char)c);
 	return -1;
 }
 
-fileListNode createNextFileNode(char *fileName)
+char reverseParse(int c)
 {
-    fileListNode f = (fileListNode) malloc(sizeof(struct fileList));
-    f->next = NULL;
-    f->fileName = fileName;
-    f->count = 1;
+	if ((c >= 0) && (c <= 25))
+		return (char)(c + 97);
+	else if ((c >= 26) && (c <= 35))
+		return (int)(c + 22);
+	printf(red "ERROR: Can not reverse parse integer: " green "%c\n" reset, (int)c);
+	return -1;
+}
+
+fileNodePointer createNewFileNode(char *fileName)
+{
+	fileNodePointer f = (fileNodePointer) malloc(sizeof(struct fileList));
+	f->next = NULL;
+	f->fileName = (char *)malloc(strlen(fileName)+1);
+	strcpy(f->fileName, fileName);
+	f->count = 1;
 	return f;
 }
 
 trieNodePointer createNewTrieNode()
 {
-    trieNodePointer t = (trieNodePointer) malloc(sizeof(struct trieNode));
+	trieNodePointer t = (trieNodePointer) malloc(sizeof(struct trieNode));
 
 	for (int i = 0; i < ALPHABET_SIZE; i++)
 		t->children[i] = NULL;
 	t->files = NULL;
-
+	t->visited = false;
+	t->token = NULL;
 	return t;
+}
+
+void resetVisited(trieNodePointer root)
+{
+	for (int i=0; i < 36; i++)
+	{
+		if (root->children[i] != NULL)
+		{
+			resetVisited(root->children[i]);
+			root->visited = false;
+		}
+	}
+}
+
+void trieInsert(trieNodePointer root, char *token, char *inputFilePath)
+{
+	trieNodePointer currentNode = root;
+
+	for (int i = 0; i < strlen(token); i++)
+	{
+		printf("%c", token[i]);
+		if (currentNode->children[parseChar(token[i])] == NULL)
+		{
+			currentNode->children[parseChar(token[i])] = createNewTrieNode();
+			currentNode = currentNode->children[parseChar(token[i])];
+		}
+		else
+		{
+			currentNode = currentNode->children[parseChar(token[i])];
+		}
+		if (i == (strlen(token) - 1))
+		{
+			if (currentNode->token == NULL)
+			{
+				currentNode->token = (char *)malloc(sizeof(strlen(token)+1));
+				strcpy(currentNode->token, token);
+			}
+			if (currentNode->files == NULL)
+			{
+				currentNode->files = createNewFileNode(inputFilePath);
+			}
+			else
+			{
+				bool newNode = true;
+				fileNodePointer tempFiles = currentNode->files;
+				while (tempFiles->next != NULL)
+				{
+					if (strcmp(tempFiles->fileName, inputFilePath) == 0)
+					{
+						tempFiles->count++;
+						newNode = false;
+						break;
+					}
+					tempFiles = tempFiles->next;
+				}
+				if (strcmp(tempFiles->fileName, inputFilePath) == 0)
+				{
+					tempFiles->count++;
+				}
+				else if (newNode == true)
+				{
+					tempFiles->next = createNewFileNode(inputFilePath);
+				}
+			}
+		}
+	}
+	printf("\n");
+}
+
+void printTreeRecursive(trieNodePointer root)
+{
+	int keepGoing = false;
+	for (int i=0; i < 36; i++)
+	{
+		if (root->children[i] != NULL)
+		{
+			trieNodePointer currentNode = root->children[i];
+
+			printTreeRecursive(currentNode);
+
+			if ((currentNode->files != NULL) && (currentNode->visited == false))
+			{
+				currentNode->visited = true;
+				fileNodePointer tempFiles = currentNode->files;
+				while (tempFiles != NULL)
+				{
+					printf("%s", currentNode->token);
+					printf("\tFilePath: %s %d\n", tempFiles->fileName, tempFiles->count);
+					tempFiles = tempFiles->next;
+				}
+				keepGoing = true;
+				break;
+			}
+		}
+	}
+
+	if (keepGoing == true)
+	{
+		printTreeRecursive(ROOT);
+	}
+}
+
+void printTree(trieNodePointer root)
+{
+	resetVisited(root);
+	printTreeRecursive(root);
+}
+
+void destroyNodes(trieNodePointer root)
+{
+	int childrenCount = 0;
+	for (int i=0; i<36; i++)
+	{
+		if (root->children[i] != NULL)
+			childrenCount++;
+	}
+
+	if (childrenCount > 0)
+	{
+		for (int i=0; i<36; i++)
+		{
+			if (root->children[i] != NULL)
+			{
+				destroyNodes(root->children[i]);
+			}
+		}
+	}
+
+	free(root);
+	root = NULL;
+}
+
+void destroyFiles(trieNodePointer root)
+{
+	for (int i=0; i<36; i++)
+	{
+		if (root->children[i] != NULL)
+		{
+			destroyFiles(root->children[i]);
+		}
+		if (root->files != NULL)
+		{
+			fileNodePointer temp = root->files;
+			fileNodePointer oldtemp = NULL;
+			while (temp != NULL)
+			{
+				oldtemp = temp;
+				temp = temp->next;
+				free(oldtemp->fileName);
+				free(oldtemp);
+			}
+			free(temp);
+			root->files = NULL;
+		}
+		if (root->token != NULL)
+		{
+			free(root->token);
+			root->token = NULL;
+		}
+	}
+}
+
+void destroy()
+{
+	destroyFiles(ROOT);
+	destroyNodes(ROOT);
 }
