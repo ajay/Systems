@@ -76,11 +76,7 @@ int indexTokens(char *inputFilePath)
 	{
 		if (token != NULL)
 		{
-			// add to data structure here
-			// printf("File: %s \t\tToken: %s\n", inputFilePath, token);
-
 			trieInsert(root, token, inputFilePath);
-
 		}
 	}
 
@@ -146,6 +142,7 @@ int main(int argc, char **argv)
 	// char *input = argv[2];
 
 	char *input = "testDir/example";
+	char *output = "output.txt";
 
 	root = createNewTrieNode();
 
@@ -153,13 +150,9 @@ int main(int argc, char **argv)
 
 	recurseDir(input);
 
-	printf("\n");
-
-	printTree(root);
+	printTree(root, output);
 
 	destroy();
-
-	// printf("%p", (void*)root);
 
 	return 0;
 }

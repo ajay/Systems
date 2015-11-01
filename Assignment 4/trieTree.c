@@ -14,6 +14,9 @@
 #define green	"\x1b[32m"
 
 trieNodePointer ROOT = NULL;
+int totalNodes;
+int nodeCount;
+char *output;
 
 void assignRoot(trieNodePointer root)
 {
@@ -40,6 +43,39 @@ char reverseParse(int c)
 	return -1;
 }
 
+void resetVisited(trieNodePointer root)
+{
+	for (int i=0; i < 36; i++)
+	{
+		if (root->children[i] != NULL)
+		{
+			resetVisited(root->children[i]);
+			root->children[i]->visited = false;
+		}
+	}
+}
+
+void total(trieNodePointer root)
+{
+	for (int i=0; i < 36; i++)
+	{
+		if (root->children[i] != NULL)
+		{
+			total(root->children[i]);
+			if (root->children[i]->files != NULL)
+				totalNodes++;
+		}
+	}
+}
+
+void sortFiles(fileNodePointer rootFile)
+{
+	if (rootFile->next == NULL)
+		return;
+
+	// rootFile->count = 10;
+}
+
 fileNodePointer createNewFileNode(char *fileName)
 {
 	fileNodePointer f = (fileNodePointer) malloc(sizeof(struct fileList));
@@ -62,25 +98,12 @@ trieNodePointer createNewTrieNode()
 	return t;
 }
 
-void resetVisited(trieNodePointer root)
-{
-	for (int i=0; i < 36; i++)
-	{
-		if (root->children[i] != NULL)
-		{
-			resetVisited(root->children[i]);
-			root->visited = false;
-		}
-	}
-}
-
 void trieInsert(trieNodePointer root, char *token, char *inputFilePath)
 {
 	trieNodePointer currentNode = root;
 
 	for (int i = 0; i < strlen(token); i++)
 	{
-		printf("%c", token[i]);
 		if (currentNode->children[parseChar(token[i])] == NULL)
 		{
 			currentNode->children[parseChar(token[i])] = createNewTrieNode();
@@ -124,12 +147,12 @@ void trieInsert(trieNodePointer root, char *token, char *inputFilePath)
 					tempFiles->next = createNewFileNode(inputFilePath);
 				}
 			}
+			sortFiles(currentNode->files);
 		}
 	}
-	printf("\n");
 }
 
-void printTreeRecursive(trieNodePointer root)
+void printTreeRecursive(trieNodePointer root, FILE *outputFile)
 {
 	int keepGoing = false;
 	for (int i=0; i < 36; i++)
@@ -138,18 +161,28 @@ void printTreeRecursive(trieNodePointer root)
 		{
 			trieNodePointer currentNode = root->children[i];
 
-			printTreeRecursive(currentNode);
+			printTreeRecursive(currentNode, outputFile);
 
 			if ((currentNode->files != NULL) && (currentNode->visited == false))
 			{
 				currentNode->visited = true;
 				fileNodePointer tempFiles = currentNode->files;
+				fprintf(outputFile, "\t{\"%s\" : [\n", currentNode->token);
+				nodeCount++;
 				while (tempFiles != NULL)
 				{
-					printf("%s", currentNode->token);
-					printf("\tFilePath: %s %d\n", tempFiles->fileName, tempFiles->count);
+					fprintf(outputFile, "\t\t{\"%s\" : %d}", tempFiles->fileName, tempFiles->count);
+					if (tempFiles->next != NULL)
+					{
+						fprintf(outputFile, ",");
+					}
+					fprintf(outputFile, "\n");
 					tempFiles = tempFiles->next;
 				}
+				fprintf(outputFile, "\t]}");
+				if (nodeCount < totalNodes)
+					fprintf(outputFile, ",");
+				fprintf(outputFile, "\n");
 				keepGoing = true;
 				break;
 			}
@@ -157,15 +190,20 @@ void printTreeRecursive(trieNodePointer root)
 	}
 
 	if (keepGoing == true)
-	{
-		printTreeRecursive(ROOT);
-	}
+		printTreeRecursive(ROOT, outputFile);
 }
 
-void printTree(trieNodePointer root)
+void printTree(trieNodePointer root, char *output)
 {
+	FILE *outputFile = fopen(output, "w");
+	totalNodes = 0;
+	nodeCount = 0;
+	total(ROOT);
+	fprintf(outputFile, "{\"list\" : [\n");
 	resetVisited(root);
-	printTreeRecursive(root);
+	printTreeRecursive(root, outputFile);
+	fprintf(outputFile, "]}\n");
+	fclose(outputFile);
 }
 
 void destroyNodes(trieNodePointer root)

@@ -18,4 +18,4 @@ $(PROGRAM): simpleTokenizer.o trieTree.o indexer.o
 	$(COMPILE) -o $@ $^
 
 clean:
-	rm -rfv *.o $(PROGRAM)
+	rm -rfv *.o *.gch $(PROGRAM)

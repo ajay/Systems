@@ -28,15 +28,11 @@ typedef struct trieNode *trieNodePointer;
 
 void assignRoot(trieNodePointer root);
 
-fileNodePointer createNewFileNode(char *fileName);
-
 trieNodePointer createNewTrieNode();
-
-void resetVisited(trieNodePointer root);
 
 void trieInsert(trieNodePointer root, char *token, char *inputFilePath);
 
-void printTree(trieNodePointer root);
+void printTree(trieNodePointer root, char *output);
 
 void destroy();
 

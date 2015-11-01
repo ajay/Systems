@@ -1,0 +1,22 @@
+{"list" : [
+	{"a" : [
+		{"testDir/example/baa" : 1},
+		{"testDir/example/boo" : 1}
+	]},
+	{"baa" : [
+		{"testDir/example/baa" : 1}
+	]},
+	{"boo" : [
+		{"testDir/example/boo" : 1}
+	]},
+	{"cat" : [
+		{"testDir/example/baa" : 1}
+	]},
+	{"dog" : [
+		{"testDir/example/boo" : 1}
+	]},
+	{"name" : [
+		{"testDir/example/baa" : 1},
+		{"testDir/example/boo" : 2}
+	]}
+]}
