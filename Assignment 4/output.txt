@@ -1,4 +1,10 @@
 {"list" : [
+	{"abcdefgh" : [
+		{"testDir/lol" : 1}
+	]},
+	{"ayyyy" : [
+		{"testDir/a/b/c/d/e/timrobot.lol" : 1}
+	]},
 	{"a" : [
 		{"testDir/example/baa" : 1},
 		{"testDir/example/boo" : 1}
@@ -9,14 +15,70 @@
 	{"boo" : [
 		{"testDir/example/boo" : 1}
 	]},
+	{"bye" : [
+		{"testDir/test.txt" : 1}
+	]},
 	{"cat" : [
 		{"testDir/example/baa" : 1}
+	]},
+	{"c" : [
+		{"testDir/test.txt" : 2}
+	]},
+	{"die" : [
+		{"testDir/test.txt" : 1}
 	]},
 	{"dog" : [
 		{"testDir/example/boo" : 1}
 	]},
+	{"fcr" : [
+		{"testDir/lol" : 1}
+	]},
+	{"fdafcrewfcrew" : [
+		{"testDir/lol" : 1}
+	]},
+	{"fvwr" : [
+		{"testDir/lol" : 1}
+	]},
+	{"f4r" : [
+		{"testDir/lol" : 1}
+	]},
+	{"hello" : [
+		{"testDir/test.txt" : 2}
+	]},
+	{"hi" : [
+		{"testDir/test.txt" : 1}
+	]},
+	{"kobeeeee" : [
+		{"testDir/a/b/dangggg" : 1}
+	]},
+	{"lel" : [
+		{"testDir/lol" : 1}
+	]},
+	{"lmao" : [
+		{"testDir/a/b/c/d/e/timrobot.lol" : 1}
+	]},
+	{"lol" : [
+		{"testDir/a/b/dangggg" : 15},
+		{"testDir/a/b/duptest" : 15},
+		{"testDir/a/b/c/d/e/timrobot.lol" : 12},
+		{"testDir/lol" : 5},
+		{"testDir/test.txt" : 4}
+	]},
 	{"name" : [
-		{"testDir/example/baa" : 1},
-		{"testDir/example/boo" : 2}
+		{"testDir/a/b/c/d/e/timrobot.lol" : 15},
+		{"testDir/example/boo" : 2},
+		{"testDir/example/baa" : 1}
+	]},
+	{"no" : [
+		{"testDir/test.txt" : 1}
+	]},
+	{"poo" : [
+		{"testDir/a/b/c/d/lalala/poo" : 5}
+	]},
+	{"test" : [
+		{"testDir/test.txt" : 1}
+	]},
+	{"yay" : [
+		{"testDir/test.txt" : 1}
 	]}
 ]}

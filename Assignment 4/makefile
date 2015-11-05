@@ -11,7 +11,7 @@ simpleTokenizer.o: simpleTokenizer.c simpleTokenizer.h
 trieTree.o: trieTree.c trieTree.h
 	$(COMPILE) -c $<
 
-indexer.o: indexer.c indexer.h
+indexer.o: indexer.c
 	$(COMPILE) -c $<
 
 $(PROGRAM): simpleTokenizer.o trieTree.o indexer.o

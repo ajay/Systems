@@ -36,4 +36,6 @@ void printTree(trieNodePointer root, char *output);
 
 void destroy();
 
+void sortFiles(trieNodePointer root);
+
 #endif

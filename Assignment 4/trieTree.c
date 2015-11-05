@@ -68,12 +68,58 @@ void total(trieNodePointer root)
 	}
 }
 
-void sortFiles(fileNodePointer rootFile)
+void sortFileHelper(fileNodePointer rootFile)
 {
-	if (rootFile->next == NULL)
+	if (rootFile == NULL || rootFile->next == NULL)
+	{
 		return;
+	}
 
-	// rootFile->count = 10;
+	fileNodePointer currentNode = rootFile;
+	fileNodePointer prevNode;
+
+	while (currentNode->next != NULL)
+	{
+		prevNode = currentNode;
+		currentNode = currentNode->next;
+
+		if(currentNode->count > prevNode->count)
+		{
+			int currentCount = currentNode->count;
+			currentNode->count = prevNode->count;
+			prevNode->count = currentCount;
+
+			char *currentFileName = malloc(strlen(currentNode->fileName)+1);
+			strcpy(currentFileName, currentNode->fileName);
+			free(currentNode->fileName);
+
+			char *prevFileName = malloc(strlen(prevNode->fileName)+1);
+			strcpy(prevFileName, prevNode->fileName);
+			free(prevNode->fileName);
+
+			currentNode->fileName = prevFileName;
+			prevNode->fileName = currentFileName;
+
+			currentNode = rootFile;
+		}
+	}
+}
+
+void sortFiles(trieNodePointer root)
+{
+	// trieNodePointer root = ROOT;
+	for (int i=0; i < 36; i++)
+	{
+		if (root->children[i] != NULL)
+		{
+			if (root->children[i]->token != NULL)
+			{
+				printf("Sorting files for: %s\n", root->children[i]->token);
+				sortFileHelper(root->children[i]->files);
+			}
+			sortFiles(root->children[i]);
+		}
+	}
 }
 
 fileNodePointer createNewFileNode(char *fileName)
@@ -117,7 +163,7 @@ void trieInsert(trieNodePointer root, char *token, char *inputFilePath)
 		{
 			if (currentNode->token == NULL)
 			{
-				currentNode->token = (char *)malloc(sizeof(strlen(token)+1));
+				currentNode->token = (char *)malloc(strlen(token)+1);
 				strcpy(currentNode->token, token);
 			}
 			if (currentNode->files == NULL)
@@ -147,7 +193,6 @@ void trieInsert(trieNodePointer root, char *token, char *inputFilePath)
 					tempFiles->next = createNewFileNode(inputFilePath);
 				}
 			}
-			sortFiles(currentNode->files);
 		}
 	}
 }

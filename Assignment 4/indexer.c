@@ -141,7 +141,7 @@ int main(int argc, char **argv)
 	// char *output = argv[1];
 	// char *input = argv[2];
 
-	char *input = "testDir/example";
+	char *input = "testDir";
 	char *output = "output.txt";
 
 	root = createNewTrieNode();
@@ -149,6 +149,8 @@ int main(int argc, char **argv)
 	assignRoot(root);
 
 	recurseDir(input);
+
+	sortFiles(root);
 
 	printTree(root, output);
 
