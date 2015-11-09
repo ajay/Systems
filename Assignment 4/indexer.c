@@ -132,24 +132,30 @@ void recurseDir(char *input)
 
 int main(int argc, char **argv)
 {
-	// if (argc != 3)
-	// {
-	// 	printf(red "ERROR: Invalid number of arguments\nUsage: ./indexer <Output: inverted-index file> <Input: directory or file>\n" reset);
-	// 	return 1;
-	// }
+	if (argc != 3)
+	{
+		printf(red "ERROR: Invalid number of arguments\nUsage: ./indexer <Output: inverted-index file> <Input: directory or file>\n" reset);
+		return 1;
+	}
 
-	// char *output = argv[1];
-	// char *input = argv[2];
+	char *output = argv[1];
+	char *input = argv[2];
 
-	char *input = "testDir";
-	char *output = "output.txt";
+	// char *input = "testDir";
+	// char *output = "output.txt";
 
 	root = createNewTrieNode();
 
 	assignRoot(root);
 
-	recurseDir(input);
-
+  	if (isADirectory(input) == 1)
+  	{
+    	recurseDir(input);
+  	}
+  	else
+  	{
+    	indexTokens(input);
+  	}
 	sortFiles(root);
 
 	printTree(root, output);

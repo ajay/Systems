@@ -114,7 +114,6 @@ void sortFiles(trieNodePointer root)
 		{
 			if (root->children[i]->token != NULL)
 			{
-				printf("Sorting files for: %s\n", root->children[i]->token);
 				sortFileHelper(root->children[i]->files);
 			}
 			sortFiles(root->children[i]);

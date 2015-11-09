@@ -1,0 +1,159 @@
+/*
+ * Ajay Srivastava (as1877) & Srihari Chekuri (svc31)
+ * testplan.txt for pa4:Indexer
+ */
+
+
+The directory testDir/ contains random folders and files that are used for testing. The given example files are also located inside the directory testDir/example/.
+
+--------------------------------------------------------------------------------
+
+Test 1:	Example directory
+INPUT:	./indexer output.txt testDir/example/
+OUTPUT:
+
+{"list" : [
+	{"a" : [
+		{"testDir/example/baa" : 1},
+		{"testDir/example/boo" : 1}
+	]},
+	{"baa" : [
+		{"testDir/example/baa" : 1}
+	]},
+	{"boo" : [
+		{"testDir/example/boo" : 1}
+	]},
+	{"cat" : [
+		{"testDir/example/baa" : 1}
+	]},
+	{"dog" : [
+		{"testDir/example/boo" : 1}
+	]},
+	{"name" : [
+		{"testDir/example/boo" : 2},
+		{"testDir/example/baa" : 1}
+	]}
+]}
+
+output.txt is as expected
+
+--------------------------------------------------------------------------------
+
+Test 2: Given test directory
+INPUT:	./indexer output.txt testDir/
+OUTPUT:
+
+{"list" : [
+	{"abcdefgh" : [
+		{"testDir/lol" : 1}
+	]},
+	{"ayyyy" : [
+		{"testDir/a/b/c/d/e/timrobot.lol" : 1}
+	]},
+	{"a" : [
+		{"testDir/example/baa" : 1},
+		{"testDir/example/boo" : 1}
+	]},
+	{"baa" : [
+		{"testDir/example/baa" : 1}
+	]},
+	{"boo" : [
+		{"testDir/example/boo" : 1}
+	]},
+	{"bye" : [
+		{"testDir/test.txt" : 1}
+	]},
+	{"cat" : [
+		{"testDir/example/baa" : 1}
+	]},
+	{"c" : [
+		{"testDir/test.txt" : 2}
+	]},
+	{"die" : [
+		{"testDir/test.txt" : 1}
+	]},
+	{"dog" : [
+		{"testDir/example/boo" : 1}
+	]},
+	{"fcr" : [
+		{"testDir/lol" : 1}
+	]},
+	{"fdafcrewfcrew" : [
+		{"testDir/lol" : 1}
+	]},
+	{"fvwr" : [
+		{"testDir/lol" : 1}
+	]},
+	{"f4r" : [
+		{"testDir/lol" : 1}
+	]},
+	{"hello" : [
+		{"testDir/test.txt" : 2}
+	]},
+	{"hi" : [
+		{"testDir/test.txt" : 1}
+	]},
+	{"kobeeeee" : [
+		{"testDir/a/b/dangggg" : 1}
+	]},
+	{"lel" : [
+		{"testDir/lol" : 1}
+	]},
+	{"lmao" : [
+		{"testDir/a/b/c/d/e/timrobot.lol" : 1}
+	]},
+	{"lol" : [
+		{"testDir/a/b/dangggg" : 15},
+		{"testDir/a/b/duptest" : 15},
+		{"testDir/a/b/c/d/e/timrobot.lol" : 12},
+		{"testDir/lol" : 5},
+		{"testDir/test.txt" : 4}
+	]},
+	{"name" : [
+		{"testDir/a/b/c/d/e/timrobot.lol" : 15},
+		{"testDir/example/boo" : 2},
+		{"testDir/example/baa" : 1}
+	]},
+	{"no" : [
+		{"testDir/test.txt" : 1}
+	]},
+	{"poo" : [
+		{"testDir/a/b/c/d/lalala/poo" : 5}
+	]},
+	{"test" : [
+		{"testDir/test.txt" : 1}
+	]},
+	{"yay" : [
+		{"testDir/test.txt" : 1}
+	]}
+]}
+
+--------------------------------------------------------------------------------
+
+Test 3: Given directory that does not exist
+INPUT:	./indexer output.txt filesThatDontExist
+OUTPUT:
+
+ERROR: There was an error opening this directory: filesThatDontExist
+
+contents of output.txt:
+
+{"list" : [
+]}
+
+--------------------------------------------------------------------------------
+
+Test 4: Too few arguments
+INPUT: ./indexer output.txt
+OUTPUT:
+
+ERROR: Invalid number of arguments
+Usage: ./indexer <Output: inverted-index file> <Input: directory or file>
+
+--------------------------------------------------------------------------------
+
+Test 5: Large file test
+INPUT: 	./indexer output.txt bigFileTest.txt
+OUTPUT:	inside output.txt
+
+This takes a little big of time, but the correct expected output is displayed in output.txt at the end.
